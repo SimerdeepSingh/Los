@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:id="@+id/ApplicantTitle"
+            android:layout_width="@dimen/default_width_form"
+            android:layout_height="wrap_content"
+            android:hint="Select title"
+            android:layout_marginTop="@dimen/form_field_between_margin"
+            android:textColorHint="#05ab9a"
+            app:met_floatingLabel="normal" />
+
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/FNameApplicant"
+        android:layout_width="@dimen/default_width_form"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/form_field_between_margin">
+
+        <EditText
+            android:id="@+id/FirstNameApplicant"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/firstname"
+            android:textColorLink="@color/colorPrimary" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/LNameApplicant"
+
+        android:layout_width="@dimen/default_width_form"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/form_field_between_margin">
+
+        <EditText
+            android:id="@+id/LastNameApplicant"
+            android:inputType="text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/lastname"
+            android:textColorLink="@color/colorPrimary"
+            android:singleLine="true" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+        android:id="@+id/RelationshipApplicant"
+        android:layout_width="@dimen/default_width_form"
+        android:layout_height="wrap_content"
+        android:hint="Select Relationship"
+        android:layout_marginTop="@dimen/form_field_between_margin"
+        android:textColorHint="#05ab9a"
+        app:met_floatingLabel="normal" />
+
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="@dimen/default_width_form"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/form_field_between_margin">
+
+        <EditText
+            android:id="@+id/coApplicantincome"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Co-Applicant Income(Monthly)"
+            android:textColorLink="@color/colorPrimary"
+            android:singleLine="true" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="@dimen/default_width_form"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/form_field_between_margin">
+
+        <EditText
+            android:id="@+id/CoApplicantExpense"
+            android:inputType="number"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Co-Applicant Expense(Monthly)"
+            android:textColorLink="@color/colorPrimary"
+            android:singleLine="true" />
+
+    </android.support.design.widget.TextInputLayout>
+
+
+
+
+
+
+
+    <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+        android:id="@+id/TypeOfApplicant"
+        android:layout_width="@dimen/default_width_form"
+        android:layout_height="wrap_content"
+        android:hint="@string/typeofemployee"
+        android:layout_marginTop="@dimen/form_field_between_margin"
+        android:textColorHint="#05ab9a"
+        app:met_floatingLabel="normal" />
+
+        <!--
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/runningemi"
+                android:layout_below="@+id/dueamount"
+                android:layout_width="@dimen/default_width_form"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/form_field_between_margin">
+
+                <EditText
+                    android:id="@+id/runningemiofloan"
+                    android:inputType="number"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/runningemi"
+                    android:textColorLink="@color/colorPrimary"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>-->
+
+</LinearLayout>
+
+

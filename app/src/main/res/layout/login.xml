@@ -28,19 +28,20 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:textSize="@dimen/default_signin_textsize"
-        android:textColor="#C0C0C0"
+        android:textColor="#2a2a2a"
         android:textAlignment="center"
-        android:text="Email Address"/>
+        android:text="Username"/>
 
 
     <android.support.design.widget.TextInputEditText
+        android:id="@+id/username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_space_signin_horizontal"
-        android:hint="Enter Email Address"
+        android:hint="Enter Username"
         android:ellipsize="start"
         android:gravity="center_horizontal"
-        android:textColorHint="@color/colorPrimary"
+        android:textColorHint="#333"
         android:background="@android:color/transparent"  />
 
 
@@ -54,19 +55,20 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:textSize="@dimen/default_signin_textsize"
-        android:textColor="#C0C0C0"
+        android:textColor="#2a2a2a"
         android:textAlignment="center"
         android:text="Password"/>
 
 
     <android.support.design.widget.TextInputEditText
+        android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_space_signin_horizontal"
         android:hint="Enter Password"
         android:ellipsize="start"
         android:gravity="center_horizontal"
-        android:textColorHint="@color/colorPrimary"
+        android:textColorHint="#333"
         android:background="@android:color/transparent"
         android:inputType="textPassword"/>
 
@@ -84,5 +86,5 @@
         android:layout_marginTop="@dimen/default_space_signin_horizontal"
         android:text="Sign In"
         android:background="@drawable/shape"
-        android:id="@+id/button" />
+        android:id="@+id/signinbutton" />
 </LinearLayout>

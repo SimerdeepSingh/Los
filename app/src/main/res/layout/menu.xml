@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/backgroundimage"
+   >
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <FrameLayout
+        android:id="@+id/container_body"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="0.1dp"
+        android:weightSum="2"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_searchlead"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingTop="30dp"
+            android:drawableTop="@drawable/searchleads"
+            android:text="Search Leads"
+            android:paddingBottom="15dp"
+            android:textColor="@color/menutext"
+            android:layout_marginRight="0.1dp"
+            android:background="@android:drawable/dialog_holo_light_frame"
+
+
+            />
+
+        <Button
+            android:id="@+id/btn_searchloan"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="30dp"
+            android:paddingBottom="15dp"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/searchloan"
+            android:text="Search Loan"
+            android:textColor="@color/menutext"
+            android:background="@android:drawable/dialog_holo_light_frame" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0.1dp"
+        android:weightSum="2"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_createlead"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingTop="30dp"
+            android:drawableTop="@drawable/createlead"
+            android:text="Create Leads"
+            android:paddingBottom="15dp"
+            android:textColor="@color/menutext"
+            android:layout_marginRight="0.1dp"
+            android:background="@android:drawable/dialog_holo_light_frame"
+
+            />
+
+        <Button
+            android:id="@+id/btn_reports"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="30dp"
+            android:paddingBottom="15dp"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/reports"
+            android:text="Reports"
+            android:textColor="@color/menutext"
+            android:background="@android:drawable/dialog_holo_light_frame" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0.1dp"
+        android:weightSum="2"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_aboutus"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:paddingTop="30dp"
+            android:drawableTop="@drawable/aboutus"
+            android:text="About Us"
+            android:paddingBottom="15dp"
+            android:textColor="@color/menutext"
+            android:layout_marginRight="0.1dp"
+            android:background="@android:drawable/dialog_holo_light_frame"
+
+            />
+
+        <Button
+            android:id="@+id/btn_dummy"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="30dp"
+            android:paddingBottom="15dp"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/createlead"
+            android:text="Reports"
+            android:textColor="@color/menutext"
+            android:background="@android:drawable/dialog_holo_light_frame" />
+
+    </LinearLayout>
+
+    </LinearLayout>
+
+
+</ScrollView>

@@ -3,4 +3,7 @@
     <color name="colorPrimary">#FCB322</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="shadow">#e4e4e4</color>
+    <color name="menutext">#2f2f2f</color>
+
 </resources>

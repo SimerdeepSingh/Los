@@ -6,6 +6,16 @@ package los.valiance.com.los.Model;
 public class UserModel {
     private String UserName;
 
+    public String getUserId() {
+        return UserId;
+    }
+
+    private String UserId;
+
+    public void setUserId(String userId) {
+        UserId = userId;
+    }
+
     public String getUserName() {
         return UserName;
     }

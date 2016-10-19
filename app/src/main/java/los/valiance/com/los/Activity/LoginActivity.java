@@ -108,10 +108,13 @@ public class LoginActivity extends AppCompatActivity {
                         Log.i("responseofjson1",String.valueOf(response));
                         try {
                             String status = response.getString("Status");
+                            String userId=  response.getString("UserId");
                             if (status.equals("1")) {
                                 user=new UserModel();
                                 user.setUserName(userName);
                                 user.setPassword(password);
+                                user.setUserId(userId);
+
                                 session.saveUserDetails(user);
                                 Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -124,6 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                             } else
                                 Toast.makeText(LoginActivity.this,"Invalid Credentials",Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
+
                             Log.i("error",e.getMessage());
                             e.printStackTrace();
                         }
@@ -135,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         progressDialog.cancel();
-                        Toast.makeText(LoginActivity.this,error.getMessage(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this,"Internal Error",Toast.LENGTH_SHORT).show();
                     }
                 });
 

@@ -1,5 +1,6 @@
 package los.valiance.com.los.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 import los.valiance.com.los.Fragments.CreateLeadFragment;
 import los.valiance.com.los.Fragments.emo;
 import los.valiance.com.los.R;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -21,6 +24,11 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("font/OpenSans-Bold.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
         setContentView(R.layout.menu);
         createLead= (Button) findViewById(R.id.btn_createlead);
         searchLead= (Button) findViewById(R.id.btn_searchlead);
@@ -39,7 +47,8 @@ public class MenuActivity extends AppCompatActivity {
         searchLead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MenuActivity.this,"Under Progress",Toast.LENGTH_SHORT).show();
+                openfragment(2);
+             //   Toast.makeText(MenuActivity.this,"Under Progress",Toast.LENGTH_SHORT).show();
             }
         });
         searchLoan.setOnClickListener(new View.OnClickListener() {
@@ -66,6 +75,11 @@ public class MenuActivity extends AppCompatActivity {
        // displayView(10);
     }
 
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
     public void openfragment(int pos)
     {
         Log.i("reachedhere","FDFDFD");

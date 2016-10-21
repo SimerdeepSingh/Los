@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/default_space_between_listview"
+        android:paddingBottom="@dimen/default_space_between_listview"
+        android:weightSum="2">
+   <TextView
+       android:layout_width="0dp"
+       android:layout_height="wrap_content"
+       android:text="Loan Id"
+       android:layout_weight="1"
+       android:gravity="center"
+       android:layout_marginTop="@dimen/default_padding_top"
+       android:layout_marginLeft="@dimen/default_padding_top"
+       android:textSize="@dimen/view_leads_size"/>
+
+        <TextView
+            android:id="@+id/loanid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Default Text"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/default_padding_top"
+            android:layout_marginLeft="@dimen/default_padding_top"
+            android:textSize="@dimen/view_leads_size"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ccc" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/default_space_between_listview"
+        android:paddingBottom="@dimen/default_space_between_listview"
+        android:layout_marginTop="@dimen/default_padding_top"
+        android:weightSum="2">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Applicant Name"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/default_padding_top"
+            android:layout_marginLeft="@dimen/default_padding_top"
+            android:textSize="@dimen/view_leads_size"/>
+
+        <TextView
+            android:id="@+id/applicantname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Default Text"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/default_padding_top"
+            android:layout_marginLeft="@dimen/default_padding_top"
+            android:textSize="@dimen/view_leads_size"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ccc" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/default_space_between_listview"
+        android:paddingBottom="@dimen/default_space_between_listview"
+        android:layout_marginTop="@dimen/default_padding_top"
+        android:weightSum="2">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Loan Purpose Type"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/default_padding_top"
+            android:layout_marginLeft="@dimen/default_padding_top"
+            android:textSize="@dimen/view_leads_size"/>
+
+        <TextView
+            android:id="@+id/loanpurposetype"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Default Text"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/default_padding_top"
+            android:layout_marginLeft="@dimen/default_padding_top"
+            android:textSize="@dimen/view_leads_size"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ccc" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/default_space_between_listview"
+        android:paddingBottom="@dimen/default_space_between_listview"
+        android:layout_marginTop="@dimen/default_padding_top"
+        android:weightSum="2">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Loan Type"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/default_padding_top"
+            android:layout_marginLeft="@dimen/default_padding_top"
+            android:textSize="@dimen/view_leads_size"/>
+
+        <TextView
+            android:id="@+id/loantype"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Default Text"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/default_padding_top"
+            android:layout_marginLeft="@dimen/default_padding_top"
+            android:textSize="@dimen/view_leads_size"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ccc" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:paddingTop="@dimen/default_space_between_listview"
+        android:paddingBottom="@dimen/default_space_between_listview"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_padding_top"
+        android:weightSum="2">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="View/Edit"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/default_padding_top"
+            android:layout_marginLeft="@dimen/default_padding_top"
+            android:textSize="@dimen/view_leads_size"/>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+        <Button
+            android:id="@+id/Viewedit"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/view"
+            android:layout_marginTop="@dimen/default_padding_top"
+            android:layout_marginLeft="@dimen/default_padding_top"
+            android:textSize="@dimen/view_leads_size"/>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

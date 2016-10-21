@@ -1,29 +1,78 @@
 package los.valiance.com.los.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import los.valiance.com.los.Fragments.CreateLeadFragment;
+import los.valiance.com.los.Fragments.ViewFragment;
 import los.valiance.com.los.Fragments.emo;
 import los.valiance.com.los.R;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    private Toolbar mToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        // mToolbar.setNavigationIcon(R.drawable.mobile_menu);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);*/
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("font/OpenSans-Regular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
         setContentView(R.layout.activity_main2);
        int fragmentToLoad=Integer.parseInt(getIntent().getExtras().getString("fragmentnumber"));
         //Log.i("valuesi",getIntent().getExtras().getString("fragmentnumber"));
         displayView(fragmentToLoad);
     }
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+   /* @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // TODO Add your menu entries here
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem backItem = menu.findItem(R.id.action_back);
+        backItem.setVisible(true);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchItem.setVisible(false);
+        return true;
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+
+        if (id == R.id.action_back) {
+
+            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }*/
+
+    @Override
+    public void onBackPressed() {
+    }
     public void displayView(int position) {
         Fragment fragment = null;
         String title = getString(R.string.app_name);
@@ -34,6 +83,10 @@ public class MainActivity extends AppCompatActivity {
            case 1:
                 fragment = new CreateLeadFragment();
                 title = "Create Lead Form";
+                break;
+            case 2:
+                fragment=new ViewFragment();
+                title="View Lead";
                 break;
             default:
                 fragment = new emo();

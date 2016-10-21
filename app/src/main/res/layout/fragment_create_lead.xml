@@ -2,10 +2,14 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools=" http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="MissingPrefix"
+
+    >
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,11 +29,12 @@
                 android:weightSum="2">
             <Spinner
                 android:id="@+id/statusspinner"
+
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:hint="Select Status"
-                android:entries="@array/array_name"
+                android:entries="@array/array_status"
                 android:textColorHint="#05ab9a"
                 /></LinearLayout>
 
@@ -55,7 +60,7 @@
                     android:weightSum="2">
                 <Spinner
                     android:id="@+id/titlespinner"
-                    android:entries="@array/array_name"
+                    android:entries="@array/array_title"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -65,14 +70,14 @@
                      /></LinearLayout>
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/fName"
+                    android:id="@+id/FirstName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/layout2"
                     >
 
                     <EditText
-                        android:id="@+id/FirstName"
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/firstname"
@@ -82,14 +87,14 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/Lname"
+                    android:id="@+id/LastName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/fName"
+                    android:layout_below="@+id/FirstName"
                     android:layout_marginTop="@dimen/form_field_between_margin">
 
                     <EditText
-                        android:id="@+id/LastName"
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/lastname"
@@ -105,17 +110,17 @@
     android:layout_height="match_parent"
     android:weightSum="2"
     android:orientation="horizontal"
-    android:layout_below="@+id/Lname">
+    android:layout_below="@+id/LastName">
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/email"
+                    android:id="@+id/emailId"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/form_field_between_margin">
 
                     <EditText
-                        android:id="@+id/emailId"
+
                         android:inputType="textEmailAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -127,7 +132,7 @@
 
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/pNumber"
+                    android:id="@+id/phonenumber"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -135,7 +140,7 @@
                     android:layout_marginTop="@dimen/form_field_between_margin">
 
                     <EditText
-                        android:id="@+id/phonenumber"
+
                         android:inputType="phone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -156,7 +161,6 @@
                     android:layout_marginTop="@dimen/form_field_between_margin">
 
                     <EditText
-                        android:id="@+id/currentAddress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/Address"
@@ -175,44 +179,44 @@
                     >
 
 
-                <Spinner
-                    android:id="@+id/state"
-                    android:layout_width="0dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_height="wrap_content"
-                    android:hint="Select State"
-                    android:layout_weight="1"
-                    android:entries="@array/array_name"
-                    android:layout_marginTop="@dimen/form_field_between_margin"
-                    android:textColorHint="#05ab9a"
-                    />
+                    <Spinner
+                        android:id="@+id/state"
+                        android:layout_width="0dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_height="wrap_content"
+                        android:hint="Select State"
+                        android:layout_weight="0.9"
+                        android:entries="@array/array_state"
+                        android:layout_marginTop="@dimen/form_field_between_margin"
+                        android:textColorHint="#05ab9a"
+                        />
 
-                <Spinner
+                    <Spinner
                     android:id="@+id/city"
                     android:layout_gravity="center_vertical"
                     android:layout_width="0dp"
                     android:layout_toRightOf="@+id/state"
                     android:layout_marginLeft="@dimen/default_margin_space"
                     android:layout_height="wrap_content"
-                    android:entries="@array/array_name"
+                    android:entries="@array/array_city"
                     android:hint="Select City"
-                    android:layout_weight="1"
+                    android:layout_weight="0.9"
                     android:layout_marginTop="@dimen/form_field_between_margin"
                     android:textColorHint="#05ab9a"
                     />
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/pin"
+                    android:id="@+id/pincode"
                   android:layout_gravity="center_vertical"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.6"
                     android:layout_toRightOf="@+id/city"
                     android:layout_marginLeft="@dimen/default_margin_space"
                     android:layout_marginTop="@dimen/form_field_between_margin">
 
                     <EditText
-                        android:id="@+id/pincode"
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
@@ -223,6 +227,16 @@
                 </android.support.design.widget.TextInputLayout>
 
 
+
+                    <CheckBox
+                        android:layout_width="0dp"
+                        android:id="@+id/postalAddress"
+                        android:layout_marginTop="@dimen/form_field_between_margin"
+                        android:layout_gravity="center_vertical"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.6"
+                        android:checked="false"
+                        android:text="For Post"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -234,7 +248,7 @@
                     >
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/lmark"
+                    android:id="@+id/landmark"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -242,7 +256,7 @@
                     android:layout_marginTop="@dimen/form_field_between_margin">
 
                     <EditText
-                        android:id="@+id/landmark"
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/landmark"
@@ -253,7 +267,7 @@
                     <TextView
                         android:layout_marginTop="@dimen/margin_top"
                         android:layout_width="@dimen/default_width_form"
-                        android:layout_toRightOf="@+id/lmark"
+                        android:layout_toRightOf="@+id/landmark"
                         android:layout_below="@+id/layout4"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
@@ -276,7 +290,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:hint="Select Source"
-                    android:entries="@array/array_name"
+                    android:entries="@array/array_source"
                     android:layout_marginTop="@dimen/form_field_between_margin"
                     android:textColorHint="#05ab9a"
                      />
@@ -294,7 +308,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:entries="@array/array_name"
+                    android:entries="@array/array_salesofficer"
                     android:hint="Select Sales Officer"
                     android:layout_marginTop="@dimen/form_field_between_margin"
                     android:textColorHint="#05ab9a"
@@ -312,7 +326,7 @@
                     android:id="@+id/teammanager"
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:entries="@array/array_name"
+                    android:entries="@array/array_teammanager"
                     android:layout_height="wrap_content"
                     android:hint="Select Team Manager"
                     android:layout_marginTop="@dimen/form_field_between_margin"
@@ -321,14 +335,14 @@
 
 </LinearLayout>
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/desc"
+                    android:id="@+id/description"
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/layout8"
                     android:layout_marginTop="@dimen/form_field_between_margin">
 
                     <EditText
-                        android:id="@+id/description"
+
                         android:inputType="textMultiLine"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -342,7 +356,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/desc"
+                    android:layout_below="@+id/description"
                     android:weightSum="2"
                     android:id="@+id/layout9"
                     >
@@ -351,7 +365,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:entries="@array/array_name"
+                    android:entries="@array/array_loantype"
                     android:hint="Select Loan Type"
                     android:layout_marginTop="@dimen/form_field_between_margin"
                     android:textColorHint="#05ab9a"
@@ -370,7 +384,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:entries="@array/array_name"
+                    android:entries="@array/array_loanpurpose"
                     android:hint="Select Loan Purpose"
                     android:layout_marginTop="@dimen/form_field_between_margin"
                     android:textColorHint="#05ab9a"
@@ -405,7 +419,7 @@
                     android:layout_toRightOf="@+id/radiobuttonyes"
                     android:layout_marginLeft="@dimen/default_margin_space"
                     android:layout_below="@+id/layout9"
-                    android:checked="false"
+                    android:checked="true"
                     android:text="No"/>
 
 
@@ -418,14 +432,14 @@
                     android:layout_height="wrap_content">
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/loamount"
+                        android:id="@+id/loanamount"
 
                         android:layout_width="@dimen/default_width_form"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/form_field_between_margin">
 
                         <EditText
-                            android:id="@+id/loanamount"
+
                             android:inputType="number"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -436,14 +450,14 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/dueamount"
-                        android:layout_below="@+id/loamount"
+                        android:id="@+id/dueamountofloan"
+                        android:layout_below="@+id/loanamount"
                         android:layout_width="@dimen/default_width_form"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/form_field_between_margin">
 
                         <EditText
-                            android:id="@+id/dueamountofloan"
+
                             android:inputType="number"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -454,14 +468,14 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <android.support.design.widget.TextInputLayout
-                        android:id="@+id/runningemi"
-                        android:layout_below="@+id/dueamount"
+                        android:id="@+id/runningemiofloan"
+                        android:layout_below="@+id/dueamountofloan"
                         android:layout_width="@dimen/default_width_form"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/form_field_between_margin">
 
                         <EditText
-                            android:id="@+id/runningemiofloan"
+
                             android:inputType="number"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -490,7 +504,7 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:hint="@string/typeofemployee"
-                    android:entries="@array/array_name"
+                    android:entries="@array/array_typeofemployee"
                     android:layout_marginTop="@dimen/form_field_between_margin"
                     android:textColorHint="#05ab9a"
                      />
@@ -506,7 +520,7 @@
                     android:id="@+id/layout12"
                     >
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/ApplicantIncome"
+                    android:id="@+id/income"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
@@ -514,7 +528,7 @@
                     android:layout_marginTop="@dimen/form_field_between_margin">
 
                     <EditText
-                        android:id="@+id/income"
+
                         android:inputType="number"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -534,7 +548,7 @@
                     android:id="@+id/layout13"
                     >
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/ApplicantExpenses"
+                    android:id="@+id/expenses"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
@@ -542,7 +556,7 @@
                     android:layout_marginTop="@dimen/form_field_between_margin">
 
                     <EditText
-                        android:id="@+id/expenses"
+
                         android:inputType="number"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -564,14 +578,14 @@
                     >
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/othernotes"
+                    android:id="@+id/Notes"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/form_field_between_margin">
 
                     <EditText
-                        android:id="@+id/Notes"
+
                         android:inputType="textMultiLine"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -591,7 +605,7 @@
                     android:id="@+id/layout15"
                     >
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/reqamount"
+                    android:id="@+id/RequestedAmount"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
@@ -599,7 +613,7 @@
                     android:layout_marginTop="@dimen/form_field_between_margin">
 
                     <EditText
-                        android:id="@+id/RequestedAmount"
+
                         android:inputType="number"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -620,15 +634,14 @@
                     android:id="@+id/layout16"
                     >
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/reqloan"
+                    android:id="@+id/RequestedLoanTenure"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/reqamount"
                     android:layout_marginTop="@dimen/form_field_between_margin">
 
                     <EditText
-                        android:id="@+id/RequestedLoanTenure"
+
                         android:inputType="number"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -669,7 +682,7 @@
                     android:layout_toRightOf="@+id/radioapplicantbuttonyes"
                     android:layout_marginLeft="@dimen/default_margin_space"
                     android:layout_below="@+id/layout9"
-                    android:checked="false"
+                    android:checked="true"
                     android:text="No"/>
 
 

@@ -19,7 +19,7 @@
             android:hint="Select title"
             android:layout_marginTop="@dimen/form_field_between_margin"
             android:textColorHint="#05ab9a"
-            android:entries="@array/array_name"
+            android:entries="@array/array_title"
             />
 </LinearLayout>
 
@@ -88,7 +88,7 @@ android:layout_weight="1"
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:hint="Select Relationship"
-        android:entries="@array/array_name"
+        android:entries="@array/array_relationship"
         android:layout_marginTop="@dimen/form_field_between_margin"
         android:textColorHint="#05ab9a"
          />
@@ -163,7 +163,7 @@ android:layout_weight="1"
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:hint="@string/typeofemployee"
-        android:entries="@array/array_name"
+        android:entries="@array/array_typeofemployee"
         android:layout_marginTop="@dimen/form_field_between_margin"
         android:textColorHint="#05ab9a"
         />

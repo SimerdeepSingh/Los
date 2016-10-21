@@ -2,18 +2,22 @@ package los.valiance.com.los.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -26,25 +30,26 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import los.valiance.com.los.Activity.LoginActivity;
+import los.valiance.com.los.Activity.MainActivity;
 import los.valiance.com.los.Activity.MenuActivity;
 import los.valiance.com.los.Helper.CurrentDate;
 import los.valiance.com.los.Helper.SessionManagement;
 import los.valiance.com.los.Model.CoApplicantModel;
 import los.valiance.com.los.Model.UserModel;
 import los.valiance.com.los.R;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static los.valiance.com.los.Helper.Constants.rooturl;
 
@@ -73,11 +78,17 @@ public class CreateLeadFragment extends Fragment {
     ArrayAdapter<String> applicantTypeAdapter;
     String[]defaultData={};
     RelativeLayout hiddenlayout;
+
+    ArrayList<String>cityId=new ArrayList<>();
     int counter=0;
        LinearLayout mainLayout;
        ArrayList<CoApplicantModel>coApplicantDetails=new ArrayList<>();
 
-    TextInputLayout firstName,coapplicantIncome,lasName,coapplicantExpense;
+    TextInputLayout coapplicantfirstName,coapplicantIncome,coapplicantlasName,coapplicantExpense;
+
+    TextInputLayout firstName,lastName,emailId,mobileNumber,Address,Pincode,Landmark,Description,loanAmount;
+    TextInputLayout dueAmountOfLoan,runningEmi,Income,Expenses,Notes,requestedAmount,requestedLoanTenure;
+
     private String statusUrl=rooturl+"/GetAllLeadStatus";//";
     private String titleUrl=rooturl+"/GetTitleTypes";//";
     private String stateUrl=rooturl+"/GetAllState";//";
@@ -85,7 +96,7 @@ public class CreateLeadFragment extends Fragment {
     private String salesOfficerUrl=rooturl+"/GetAllSalesOfficers";//";
     private String teamManagerUrl=rooturl+"/GetAllTeamManagers";
     private String loanTypeUrl=rooturl+"/GetAllLoanType";//";
-    private String loanPurposeUrl=rooturl+"/GetAllSalesOfficers";//";
+    private String loanPurposeUrl=rooturl+"/GetAllLoanPurposeType";//";
     private String typeOFEmployeeUrl=rooturl+"/GetAllEmployeeType";//";
     private String relationshipUrl=rooturl+"/GetAllRelationshipType";//";
     private String cityUrl=rooturl+"/GetAllDistrict";//";
@@ -93,8 +104,12 @@ public class CreateLeadFragment extends Fragment {
     private String saveUrl=rooturl+"/AddUpdateLoanLeadEnquiry";
 
     private UserModel userModel;
+    CheckBox postalAddress;
     private SessionManagement session;
+    private String isLoanExist="0";
+    private String isApplyingWithCoApplicant="0";
     public CreateLeadFragment() {
+
         // Required empty public constructor
     }
 
@@ -103,9 +118,12 @@ public class CreateLeadFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         session=new SessionManagement(getContext());
 
     }
+
+
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
@@ -113,6 +131,27 @@ public class CreateLeadFragment extends Fragment {
         Log.i("DFDFDF","reachet43d");
         View rootView = inflater.inflate(R.layout.fragment_create_lead, container, false);
 
+        firstName= (TextInputLayout) rootView.findViewById(R.id.FirstName);
+       // firstName.setTypeface(Typeface.createFromAsset(getContext().getAssets(),"font/OpenSans-Bold.ttf"));
+        lastName= (TextInputLayout) rootView.findViewById(R.id.LastName);
+        emailId= (TextInputLayout) rootView.findViewById(R.id.emailId);
+        mobileNumber= (TextInputLayout) rootView.findViewById(R.id.phonenumber);
+        Address= (TextInputLayout) rootView.findViewById(R.id.Address);
+        Pincode= (TextInputLayout) rootView.findViewById(R.id.pincode);
+        Landmark= (TextInputLayout) rootView.findViewById(R.id.landmark);
+        Description= (TextInputLayout) rootView.findViewById(R.id.description);
+        loanAmount= (TextInputLayout) rootView.findViewById(R.id.loanamount);
+        dueAmountOfLoan= (TextInputLayout) rootView.findViewById(R.id.dueamountofloan);
+        runningEmi= (TextInputLayout) rootView.findViewById(R.id.runningemiofloan);
+        Income= (TextInputLayout) rootView.findViewById(R.id.income);
+        Expenses= (TextInputLayout) rootView.findViewById(R.id.expenses);
+        Notes= (TextInputLayout) rootView.findViewById(R.id.Notes);
+        requestedAmount=(TextInputLayout) rootView.findViewById(R.id.RequestedAmount);
+        requestedLoanTenure=(TextInputLayout) rootView.findViewById(R.id.RequestedLoanTenure);
+
+        postalAddress= (CheckBox) rootView.findViewById(R.id.postalAddress);
+
+        Log.i("outputofcheck", String.valueOf(postalAddress.isChecked()));
         statusSpinner = (Spinner)rootView.findViewById(R.id.statusspinner);
         stateSpinner=(Spinner)rootView.findViewById(R.id.state);
         citySpinner=(Spinner)rootView.findViewById(R.id.city);
@@ -124,15 +163,17 @@ public class CreateLeadFragment extends Fragment {
         loanPurposeSpinner=(Spinner)rootView.findViewById(R.id.loanpurpose);
         typeOfEmployeeSpinner=(Spinner)rootView.findViewById(R.id.typeofemployee);
 
-        retrieveDataForDropdown(statusUrl,statusSpinner);
-        retrieveDataForDropdown(titleUrl,titleSpinner);
-        retrieveDataForDropdown(stateUrl,stateSpinner);
-        retrieveDataForDropdown(sourceUrl,sourceSpinner);
-        retrieveDataForDropdown(salesOfficerUrl,salesOfficerSpinner);
-        retrieveDataForDropdown(teamManagerUrl,teamManagerSpinner);
-        retrieveDataForDropdown(loanTypeUrl,loanTypeSpinner);
-        retrieveDataForDropdown(loanPurposeUrl,loanPurposeSpinner);
-        retrieveDataForDropdown(typeOFEmployeeUrl,typeOfEmployeeSpinner);
+
+
+        retrieveDataForDropdown(statusUrl,statusSpinner,statusSpinner.getItemAtPosition(0).toString());
+        retrieveDataForDropdown(titleUrl,titleSpinner, titleSpinner.getItemAtPosition(0).toString());
+        retrieveDataForDropdown(stateUrl,stateSpinner, stateSpinner.getItemAtPosition(0).toString());
+        retrieveDataForDropdown(sourceUrl,sourceSpinner, sourceSpinner.getItemAtPosition(0).toString());
+        retrieveDataForDropdown(salesOfficerUrl,salesOfficerSpinner, salesOfficerSpinner.getItemAtPosition(0).toString());
+        retrieveDataForDropdown(teamManagerUrl,teamManagerSpinner, teamManagerSpinner.getItemAtPosition(0).toString());
+        retrieveDataForDropdown(loanTypeUrl,loanTypeSpinner, loanTypeSpinner.getItemAtPosition(0).toString());
+        retrieveDataForDropdown(loanPurposeUrl,loanPurposeSpinner, loanPurposeSpinner.getItemAtPosition(0).toString());
+        retrieveDataForDropdown(typeOFEmployeeUrl,typeOfEmployeeSpinner, typeOfEmployeeSpinner.getItemAtPosition(0).toString());
 
         Save= (Button) rootView.findViewById(R.id.Save);
         /*titleAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, TITLE_DATA);
@@ -145,13 +186,14 @@ public class CreateLeadFragment extends Fragment {
         titleAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, defaultData);
         applicantTypeAdapter =new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, defaultData);
 
-        statusSpinner.setAdapter(defaultadapter);
+
         hiddenlayout=(RelativeLayout) rootView.findViewById(R.id.otherloanlayout);
         mainLayout=(LinearLayout)rootView.findViewById(R.id.mainlayout);
 
 
 
 //        mainLayout.addView(coapplicantdetails);
+      /*  statusSpinner.setAdapter(defaultadapter);
         stateSpinner.setAdapter(defaultadapter);
         citySpinner.setAdapter(defaultadapter);
         titleSpinner.setAdapter(defaultadapter);
@@ -161,7 +203,7 @@ public class CreateLeadFragment extends Fragment {
         teamManagerSpinner.setAdapter(defaultadapter);
         loanTypeSpinner.setAdapter(defaultadapter);
         loanPurposeSpinner.setAdapter(defaultadapter);
-        typeOfEmployeeSpinner.setAdapter(defaultadapter);
+        typeOfEmployeeSpinner.setAdapter(defaultadapter);*/
 
 
 
@@ -174,6 +216,7 @@ public class CreateLeadFragment extends Fragment {
             @Override
             public void onClick(View v) {
                // Toast.makeText(getContext(),"Clicked no",Toast.LENGTH_SHORT).show();
+                isLoanExist="0";
                 hiddenlayout.setVisibility(View.GONE);
                 otherloandetailsno.setChecked(false);
             }
@@ -181,6 +224,7 @@ public class CreateLeadFragment extends Fragment {
        otherloandetailsyes.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               isLoanExist="1";
                hiddenlayout.setVisibility(View.VISIBLE);
                otherloandetailsyes.setChecked(false);
            }
@@ -189,6 +233,7 @@ public class CreateLeadFragment extends Fragment {
              coapplicantdetailsyes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isApplyingWithCoApplicant="1";
                 // Toast.makeText(getContext(),"Clicked no",Toast.LENGTH_SHORT).show();
                 addCoApplicant(inflater,container);
 
@@ -196,7 +241,7 @@ public class CreateLeadFragment extends Fragment {
         coapplicantdetailsno.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                isApplyingWithCoApplicant="0";
                 for(CoApplicantModel details :coApplicantDetails)
                 {
                     mainLayout.removeView( details.getCoApplicantView());
@@ -211,11 +256,11 @@ public class CreateLeadFragment extends Fragment {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                citySpinner.setAdapter(defaultadapter);
+               // citySpinner.setAdapter(defaultadapter);
                 Log.i("newtext","dfdfdfd");
                 String newCityUrl=cityUrl+"/"+position;
                 Log.i("newtext",cityUrl);
-                retrieveDataForDropdown(newCityUrl,citySpinner);
+                retrieveDataForDropdown(newCityUrl,citySpinner, citySpinner.getItemAtPosition(0).toString());
             }
 
             @Override
@@ -227,6 +272,8 @@ public class CreateLeadFragment extends Fragment {
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+              //  validate details
+                // if( checkValidation())
                 saveDataToDb();
                /* for(CoApplicantModel el:coApplicantDetails)
                 {
@@ -239,63 +286,172 @@ public class CreateLeadFragment extends Fragment {
         return rootView;
     }
 
+    private boolean checkValidation() {
+        boolean flag=true;
+        if(firstName.getEditText().getText().toString().isEmpty()) {
+            firstName.getEditText().setError(getString(R.string.error_field_required));
+            flag=false;
+        }
+        if(lastName.getEditText().getText().toString().isEmpty()) {
+            lastName.getEditText().setError(getString(R.string.error_field_required));
+            flag=false;
+        }
+        if(emailId.getEditText().getText().toString().isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(emailId.getEditText().getText()).matches())
+        {
+            if(emailId.getEditText().getText().toString().isEmpty())
+                emailId.getEditText().setError(getString(R.string.error_field_required));
+            else
+                emailId.getEditText().setError(getString(R.string.error_invalid_email));
+            flag=false;
+        }
+
+        if(mobileNumber.getEditText().getText().toString().length()<10 || mobileNumber.getEditText().getText().toString().isEmpty())
+        {
+            if(mobileNumber.getEditText().getText().toString().isEmpty())
+               mobileNumber.getEditText().setError(getString(R.string.error_field_required));
+            else
+                mobileNumber.getEditText().setError(getString(R.string.error_invalid_mobile));
+            flag=false;
+        }
+
+        if(Address.getEditText().getText().toString().isEmpty()) {
+            Address.getEditText().setError(getString(R.string.error_field_required));
+            flag=false;
+        }
+
+        if(stateSpinner.getSelectedItemPosition()==0) {
+            ((TextView)stateSpinner.getSelectedView()).setError(getString(R.string.error_field_required));
+            flag=false;
+        }
+
+        if(citySpinner.getSelectedItemPosition()==0) {
+            ((TextView)citySpinner.getSelectedView()).setError(getString(R.string.error_field_required));
+            flag=false;
+        }
+
+        if(Pincode.getEditText().getText().toString().isEmpty() || Pincode.getEditText().getText().toString().length()<6) {
+            if(Pincode.getEditText().getText().toString().isEmpty())
+            Pincode.getEditText().setError(getString(R.string.error_field_required));
+            else
+                Pincode.getEditText().setError(getString(R.string.error_invalid_pincode));
+            flag=false;
+        }
+
+        if(sourceSpinner.getSelectedItemPosition()==0) {
+            ((TextView)sourceSpinner.getSelectedView()).setError(getString(R.string.error_field_required));
+            flag=false;
+        }
+
+        if(salesOfficerSpinner.getSelectedItemPosition()==0) {
+            ((TextView)salesOfficerSpinner.getSelectedView()).setError(getString(R.string.error_field_required));
+            flag=false;
+        }
+
+        if(teamManagerSpinner.getSelectedItemPosition()==0) {
+            ((TextView)teamManagerSpinner.getSelectedView()).setError(getString(R.string.error_field_required));
+            flag=false;
+        }
+
+        if(loanTypeSpinner.getSelectedItemPosition()==0) {
+            ((TextView)loanTypeSpinner.getSelectedView()).setError(getString(R.string.error_field_required));
+            flag=false;
+        }
+
+        if(loanPurposeSpinner.getSelectedItemPosition()==0) {
+            ((TextView)loanPurposeSpinner.getSelectedView()).setError(getString(R.string.error_field_required));
+            flag=false;
+        }
+
+        if(requestedAmount.getEditText().getText().toString().isEmpty()) {
+            requestedAmount.getEditText().setError(getString(R.string.error_field_required));
+            flag=false;
+        }
+
+        if(requestedLoanTenure.getEditText().getText().toString().isEmpty()) {
+            requestedLoanTenure.getEditText().setError(getString(R.string.error_field_required));
+            flag=false;
+        }
+
+
+
+            /*if(password.getText().toString().isEmpty())
+        {
+            password.setError("Please Enter Password");
+            flag=false;
+        }*/
+        return flag;
+
+
+
+    }
+
     private void saveDataToDb() {
         JSONArray coApplicantRecord=new JSONArray();
-        JSONObject test=new JSONObject();
-        coApplicantRecord.put(test);
-        String currentDate=new CurrentDate().getCurrentdate();
+        for(CoApplicantModel details:coApplicantDetails)
+        {
+            JSONObject newModel=new JSONObject();
+            Gson gson = new Gson();
+            String json = gson.toJson(details);
+           // String =new Gson().toJson(details);
+            Log.i("valueofjsonarray", json);
+        }
+       // JSONArray coApplicantRecord = new JSONArray(coApplicantDetails);
+        Log.i("valueofjsonarray", String.valueOf(coApplicantRecord));
+        /*String jsonArray = gson.toJson(mylist);
+        for(CoApplicantModel details:coApplicantDetails)
+        {
+            JSONObject newModel=new JSONObject();
+
+        }*/
+
+      //  coApplicantRecord.put(test);
+       /* String currentDate=new CurrentDate().getCurrentdate();
         Map<String, Object> postParam= new HashMap<String, Object>();
-        //postParam.put("LeadID",0);
-        postParam.put("FirstName", "Fff");
-        postParam.put("LastName", "Fff");
-        postParam.put("ContactEmail","s@f.com");
-        postParam.put("ContactPhone", "1234567890");
-        postParam.put("AddressLine1", "Fff");
+
+        postParam.put("LeadStatus",statusSpinner.getSelectedItemPosition());
+        postParam.put("FirstName", firstName.getEditText().getText().toString());
+        postParam.put("LastName", lastName.getEditText().getText().toString());
+        postParam.put("ContactEmail",emailId.getEditText().getText().toString());
+        postParam.put("ContactPhone", mobileNumber.getEditText().getText().toString());
+        postParam.put("AddressLine1", Address.getEditText().getText().toString());
        // postParam.put("AddressLine2","Fff");
-        postParam.put("District", 565);
-        postParam.put("State", 2);
-        postParam.put("Pin", "110018");
-        //postParam.put("AddressTrueForPost",true);
-        postParam.put("Landmark", "Fff");
+        postParam.put("District", cityId.get(citySpinner.getSelectedItemPosition()-1));
+        postParam.put("State", stateSpinner.getSelectedItemPosition());
+        postParam.put("Pin", Pincode.getEditText().getText().toString());
 
-        //postParam.put("LeadCreatedBy","11");
-        postParam.put("LeadSource", 2);
-        postParam.put("LeadStatus", 1);
+        postParam.put("AddressTrueForPost",postalAddress.isChecked());
+        postParam.put("Landmark", Landmark.getEditText().getText().toString());
+        postParam.put("LeadCreatedBy",userModel.getUserId()); //login userid
 
-       // postParam.put("Description", "Fff");
-        postParam.put("LoanType",1);
-        postParam.put("LoanPurposeType",1);
-      //  postParam.put("LoanTypeName", "");
+        postParam.put("LeadSource",sourceSpinner.getSelectedItemPosition());
+        postParam.put("SalesOfficer", salesOfficerSpinner.getSelectedItemPosition());
+        postParam.put("TeamManager", teamManagerSpinner.getSelectedItemPosition());
 
-    //    postParam.put("strTimeFrameDate", "");
-        postParam.put("IsAnyOtherLoansExist","0");
-      //  postParam.put("OtherLoansBankName", "Fff");
-       // postParam.put("OtherLoanAmount", 1);
+        postParam.put("Description", Description.getEditText().getText().toString());
+        postParam.put("LoanType",loanTypeSpinner.getSelectedItemPosition());
+        postParam.put("LoanPurposeType",loanPurposeSpinner.getSelectedItemPosition());
 
-       // postParam.put("Income", 1);
-      //  postParam.put("Expense",1);
-       // postParam.put("Notes", "Fff");
-        postParam.put("RequestedLoanAmount", 1);
+        postParam.put("IsAnyOtherLoansExist",isLoanExist);
+        postParam.put("OtherLoanAmount",loanAmount.getEditText().getText().toString());
+         postParam.put("OutStandingAmount", dueAmountOfLoan.getEditText().getText().toString()); //dueamount
+         postParam.put("RunningEMI",Integer.parseInt(runningEmi.getEditText().getText().toString()));
+         postParam.put("Income",Integer.parseInt(Income.getEditText().getText().toString()));
+         postParam.put("Expense",Integer.parseInt(Expenses.getEditText().getText().toString()));
+         postParam.put("Notes", Notes.getEditText().getText().toString());
+        //
+        postParam.put("RequestedLoanAmount",Integer.parseInt(requestedAmount.getEditText().getText().toString()));
 
-        postParam.put("RequestedLoanTenureInYears", 1);
-      //  postParam.put("strLeadCreatedDate","");
-      //  postParam.put("strLeadModifyDate", "");
-      //  postParam.put("OutStandingAmount", "12");
+        postParam.put("RequestedLoanTenureInYears", Integer.parseInt(requestedAmount.getEditText().getText().toString()));
+        postParam.put("strLeadCreatedDate",currentDate); //currentdate
+        postParam.put("strLeadModifyDate", currentDate); //current date
+        postParam.put("LoanDate", currentDate);  //currendate
+        //postParam.put("LoanTypeName", "");\
+        postParam.put("strTimeFrameDate", currentDate); //currentdate
+        postParam.put("TypeOfEmployement", typeOfEmployeeSpinner.getSelectedItemPosition());
+        postParam.put("IsApplyingWithCoApplicant", isApplyingWithCoApplicant);
 
-        //postParam.put("LoanDate", "");
-       // postParam.put("RunningEMI",1);
-       // postParam.put("IsProcessingfee", false);
-      //  postParam.put("TypeOfEmployement", 1);
-
-       // postParam.put("ChequeNumber", "");
-      //  postParam.put("NameOnCheque","");
-        postParam.put("IsApplyingWithCoApplicant", "0");
-        postParam.put("SalesOfficer", 1);
-
-        postParam.put("TeamManager", 1);
-        postParam.put("TitleType",1);
+        postParam.put("TitleType",titleSpinner.getSelectedItemPosition());
         postParam.put("LeadCoapplicantDetails", coApplicantRecord);
-       // postParam.put("ProcessingFeesDetails", "");
 
 Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
 
@@ -327,7 +483,7 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
                 });
 
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.add(stringRequest);
+        requestQueue.add(stringRequest);*/
 
 
 
@@ -342,8 +498,8 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
     public void addCoApplicant(LayoutInflater inflater, ViewGroup container)
     {
         View coapplicantdetails=inflater.inflate(R.layout.coapplicantform, container, false);
-        firstName=(TextInputLayout) coapplicantdetails.findViewById(R.id.FirstNameApplicant);
-        lasName=(TextInputLayout) coapplicantdetails.findViewById(R.id.LastNameApplicant);
+        coapplicantfirstName=(TextInputLayout) coapplicantdetails.findViewById(R.id.FirstNameApplicant);
+        coapplicantlasName=(TextInputLayout) coapplicantdetails.findViewById(R.id.LastNameApplicant);
 
         ApplicantTitleSpinner=(Spinner)coapplicantdetails.findViewById(R.id.ApplicantTitle);
         ApplicantTitleSpinner.setAdapter(titleAdapter);
@@ -352,8 +508,8 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
         ApplicantTypeSpinner.setAdapter(applicantTypeAdapter);
 
         ApplicantRelationshipSpinner=(Spinner)coapplicantdetails.findViewById(R.id.RelationshipApplicant);
-        ApplicantRelationshipSpinner.setAdapter(defaultadapter);
-        retrieveDataForDropdown(relationshipUrl, ApplicantRelationshipSpinner);
+       // ApplicantRelationshipSpinner.setAdapter(defaultadapter);
+        retrieveDataForDropdown(relationshipUrl, ApplicantRelationshipSpinner, ApplicantRelationshipSpinner.getItemAtPosition(0).toString());
 
         coapplicantIncome=(TextInputLayout) coapplicantdetails.findViewById(R.id.coApplicantincome);
         coapplicantExpense=(TextInputLayout) coapplicantdetails.findViewById(R.id.CoApplicantExpense);
@@ -362,9 +518,9 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
 
 
         if(titleAdapter.getCount()==0)
-            retrieveDataForDropdown(titleUrl, ApplicantTitleSpinner);
+            retrieveDataForDropdown(titleUrl, ApplicantTitleSpinner, ApplicantTitleSpinner.getItemAtPosition(0).toString());
         if(applicantTypeAdapter.getCount()==0)
-            retrieveDataForDropdown(typeOFEmployeeUrl, ApplicantTypeSpinner);
+            retrieveDataForDropdown(typeOFEmployeeUrl, ApplicantTypeSpinner, ApplicantTypeSpinner.getItemAtPosition(0).toString());
 
 
         // firstName.setId(counter);
@@ -377,8 +533,8 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
         newModel.setCoapplicantIncome(coapplicantIncome);
         newModel.setGetCoapplicantExpense(coapplicantExpense);
         newModel.setTitleSpinner(ApplicantTitleSpinner);
-        newModel.setFirstName(firstName);
-        newModel.setLastName(lasName);
+        newModel.setFirstName(coapplicantfirstName);
+        newModel.setLastName(coapplicantlasName);
         newModel.setRelationship(ApplicantRelationshipSpinner);
         newModel.setCoApplicantView(coapplicantdetails);
 
@@ -400,7 +556,7 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
         super.onDetach();
     }
 
-    public void retrieveDataForDropdown(String url, final Spinner spinner)
+    public void retrieveDataForDropdown(String url, final Spinner spinner, final String defaultDataForSpinner)
     {
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET,url,null,
                 new Response.Listener<JSONObject>() {
@@ -412,10 +568,12 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
 
                             JSONArray listOfValues = response.getJSONArray("DataList");
                             defaultData= new String[listOfValues.length()+1];
-                           defaultData[0]="Please Select";
+                            defaultData[0]=defaultDataForSpinner;
+                            cityId.clear();
                             for(int value=0;value<listOfValues.length();value++)
                             {
                                  JSONObject jsonValue=listOfValues.getJSONObject(value);
+                                 cityId.add(jsonValue.get("ID").toString());
                                  defaultData[value+1]= jsonValue.get("Name").toString();
                                 // Log.i("responseofjson123", def);
                             }
@@ -446,9 +604,23 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
         requestQueue.add(stringRequest);
     }
 
-    private void showJSON(String json){
-        JSONObject jsonRow;
-        Log.i("responseofjson",json);
-        //  jsonRow=new JSONObject(json);
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // TODO Add your menu entries here
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_main, menu);
+        MenuItem backItem = menu.findItem(R.id.action_back);
+        backItem.setVisible(true);
+
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_back) {
+            Intent intent = new Intent(getActivity(), MenuActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

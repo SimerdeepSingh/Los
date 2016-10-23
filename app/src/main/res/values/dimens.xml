@@ -12,6 +12,8 @@
     <dimen name="default_padding_left">18dp</dimen>
     <dimen name="default_padding_right">18dp</dimen>
 
+    <dimen name="spacebetweenbuttons">10dp</dimen>
+    <dimen name="defaultheightformenubutton">200dp</dimen>
 
     <dimen name="default_space_between_listview">10dp</dimen>
 

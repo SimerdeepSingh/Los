@@ -35,14 +35,17 @@ import com.google.gson.Gson;
 
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import los.valiance.com.los.Activity.MainActivity;
 import los.valiance.com.los.Activity.MenuActivity;
+import los.valiance.com.los.Database.LocalDatabase;
 import los.valiance.com.los.Helper.CurrentDate;
 import los.valiance.com.los.Helper.SessionManagement;
 import los.valiance.com.los.Model.CoApplicantModel;
@@ -51,7 +54,22 @@ import los.valiance.com.los.R;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static los.valiance.com.los.Helper.Constants.cityUrl;
+import static los.valiance.com.los.Helper.Constants.leadTypeTable;
+import static los.valiance.com.los.Helper.Constants.loanPurposeTable;
+import static los.valiance.com.los.Helper.Constants.loanTypeTable;
+import static los.valiance.com.los.Helper.Constants.relationshipTable;
+import static los.valiance.com.los.Helper.Constants.relationshipUrl;
 import static los.valiance.com.los.Helper.Constants.rooturl;
+import static los.valiance.com.los.Helper.Constants.salesOfficerTable;
+import static los.valiance.com.los.Helper.Constants.saveUrl;
+import static los.valiance.com.los.Helper.Constants.sourceTable;
+import static los.valiance.com.los.Helper.Constants.stateTable;
+import static los.valiance.com.los.Helper.Constants.statusTable;
+import static los.valiance.com.los.Helper.Constants.teamManagerTable;
+import static los.valiance.com.los.Helper.Constants.titleTable;
+import static los.valiance.com.los.Helper.Constants.titleUrl;
+import static los.valiance.com.los.Helper.Constants.typeOFEmployeeUrl;
 
 
 public class CreateLeadFragment extends Fragment {
@@ -68,7 +86,7 @@ public class CreateLeadFragment extends Fragment {
     Spinner ApplicantTitleSpinner;
     Spinner ApplicantRelationshipSpinner;
     Spinner ApplicantTypeSpinner;
-
+LocalDatabase localDatabase;
 
     RadioButton otherloandetailsyes,otherloandetailsno,coapplicantdetailsyes,coapplicantdetailsno;
     private Button Save;
@@ -89,25 +107,20 @@ public class CreateLeadFragment extends Fragment {
     TextInputLayout firstName,lastName,emailId,mobileNumber,Address,Pincode,Landmark,Description,loanAmount;
     TextInputLayout dueAmountOfLoan,runningEmi,Income,Expenses,Notes,requestedAmount,requestedLoanTenure;
 
-    private String statusUrl=rooturl+"/GetAllLeadStatus";//";
-    private String titleUrl=rooturl+"/GetTitleTypes";//";
-    private String stateUrl=rooturl+"/GetAllState";//";
-    private String sourceUrl=rooturl+"/GetAllLeadSource";//";
-    private String salesOfficerUrl=rooturl+"/GetAllSalesOfficers";//";
-    private String teamManagerUrl=rooturl+"/GetAllTeamManagers";
-    private String loanTypeUrl=rooturl+"/GetAllLoanType";//";
-    private String loanPurposeUrl=rooturl+"/GetAllLoanPurposeType";//";
-    private String typeOFEmployeeUrl=rooturl+"/GetAllEmployeeType";//";
-    private String relationshipUrl=rooturl+"/GetAllRelationshipType";//";
-    private String cityUrl=rooturl+"/GetAllDistrict";//";
 
-    private String saveUrl=rooturl+"/AddUpdateLoanLeadEnquiry";
+
+
+
+
 
     private UserModel userModel;
     CheckBox postalAddress;
     private SessionManagement session;
     private String isLoanExist="0";
     private String isApplyingWithCoApplicant="0";
+
+    LinkedHashMap <Integer,String>statusList,titleList,stateList,sourceList,salesOfficerList,teamManagerList,loanTypeList;
+    LinkedHashMap <Integer,String> loanPurposeList,employeeTypeList,relationshipList;
     public CreateLeadFragment() {
 
         // Required empty public constructor
@@ -130,7 +143,7 @@ public class CreateLeadFragment extends Fragment {
                              Bundle savedInstanceState) {
         Log.i("DFDFDF","reachet43d");
         View rootView = inflater.inflate(R.layout.fragment_create_lead, container, false);
-
+        localDatabase=new LocalDatabase(getContext());
         firstName= (TextInputLayout) rootView.findViewById(R.id.FirstName);
        // firstName.setTypeface(Typeface.createFromAsset(getContext().getAssets(),"font/OpenSans-Bold.ttf"));
         lastName= (TextInputLayout) rootView.findViewById(R.id.LastName);
@@ -165,15 +178,35 @@ public class CreateLeadFragment extends Fragment {
 
 
 
-        retrieveDataForDropdown(statusUrl,statusSpinner,statusSpinner.getItemAtPosition(0).toString());
-        retrieveDataForDropdown(titleUrl,titleSpinner, titleSpinner.getItemAtPosition(0).toString());
-        retrieveDataForDropdown(stateUrl,stateSpinner, stateSpinner.getItemAtPosition(0).toString());
-        retrieveDataForDropdown(sourceUrl,sourceSpinner, sourceSpinner.getItemAtPosition(0).toString());
-        retrieveDataForDropdown(salesOfficerUrl,salesOfficerSpinner, salesOfficerSpinner.getItemAtPosition(0).toString());
-        retrieveDataForDropdown(teamManagerUrl,teamManagerSpinner, teamManagerSpinner.getItemAtPosition(0).toString());
-        retrieveDataForDropdown(loanTypeUrl,loanTypeSpinner, loanTypeSpinner.getItemAtPosition(0).toString());
-        retrieveDataForDropdown(loanPurposeUrl,loanPurposeSpinner, loanPurposeSpinner.getItemAtPosition(0).toString());
-        retrieveDataForDropdown(typeOFEmployeeUrl,typeOfEmployeeSpinner, typeOfEmployeeSpinner.getItemAtPosition(0).toString());
+
+        statusList=localDatabase.getDropDownData(statusTable);
+        setDropdownValues(statusSpinner,statusList);
+        titleList=localDatabase.getDropDownData(titleTable);
+        setDropdownValues(titleSpinner,titleList);
+        stateList=localDatabase.getDropDownData(stateTable);
+        setDropdownValues(stateSpinner,stateList);
+        sourceList=localDatabase.getDropDownData(sourceTable);
+        setDropdownValues(sourceSpinner,sourceList);
+        salesOfficerList=localDatabase.getDropDownData(salesOfficerTable);
+        setDropdownValues(salesOfficerSpinner,salesOfficerList);
+        teamManagerList=localDatabase.getDropDownData(teamManagerTable);
+        setDropdownValues(teamManagerSpinner,teamManagerList);
+        loanTypeList=localDatabase.getDropDownData(loanTypeTable);
+        setDropdownValues(loanTypeSpinner,loanTypeList);
+        loanPurposeList=localDatabase.getDropDownData(loanPurposeTable);
+        setDropdownValues(loanPurposeSpinner,loanPurposeList);
+        employeeTypeList=localDatabase.getDropDownData(leadTypeTable);
+        setDropdownValues(typeOfEmployeeSpinner,employeeTypeList);
+
+       // retrieveDataForDropdown(statusUrl,statusSpinner,statusSpinner.getItemAtPosition(0).toString());
+       // retrieveDataForDropdown(titleUrl,titleSpinner, titleSpinner.getItemAtPosition(0).toString());
+       // retrieveDataForDropdown(stateUrl,stateSpinner, stateSpinner.getItemAtPosition(0).toString());
+       // retrieveDataForDropdown(sourceUrl,sourceSpinner, sourceSpinner.getItemAtPosition(0).toString());
+        //retrieveDataForDropdown(salesOfficerUrl,salesOfficerSpinner, salesOfficerSpinner.getItemAtPosition(0).toString());
+      //  retrieveDataForDropdown(teamManagerUrl,teamManagerSpinner, teamManagerSpinner.getItemAtPosition(0).toString());
+      //  retrieveDataForDropdown(loanTypeUrl,loanTypeSpinner, loanTypeSpinner.getItemAtPosition(0).toString());
+     //   retrieveDataForDropdown(loanPurposeUrl,loanPurposeSpinner, loanPurposeSpinner.getItemAtPosition(0).toString());
+     //   retrieveDataForDropdown(typeOFEmployeeUrl,typeOfEmployeeSpinner, typeOfEmployeeSpinner.getItemAtPosition(0).toString());
 
         Save= (Button) rootView.findViewById(R.id.Save);
         /*titleAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, TITLE_DATA);
@@ -218,7 +251,7 @@ public class CreateLeadFragment extends Fragment {
                // Toast.makeText(getContext(),"Clicked no",Toast.LENGTH_SHORT).show();
                 isLoanExist="0";
                 hiddenlayout.setVisibility(View.GONE);
-                otherloandetailsno.setChecked(false);
+                otherloandetailsyes.setChecked(false);
             }
         });
        otherloandetailsyes.setOnClickListener(new View.OnClickListener() {
@@ -226,7 +259,7 @@ public class CreateLeadFragment extends Fragment {
            public void onClick(View v) {
                isLoanExist="1";
                hiddenlayout.setVisibility(View.VISIBLE);
-               otherloandetailsyes.setChecked(false);
+               otherloandetailsno.setChecked(false);
            }
        });
 
@@ -272,8 +305,8 @@ public class CreateLeadFragment extends Fragment {
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  validate details
-                // if( checkValidation())
+              // validate details
+                if( checkValidation())
                 saveDataToDb();
                /* for(CoApplicantModel el:coApplicantDetails)
                 {
@@ -284,6 +317,17 @@ public class CreateLeadFragment extends Fragment {
         });
         //Log.i("DFDFDF","reachet43dr5");
         return rootView;
+    }
+
+    private void setDropdownValues(Spinner spinnerToSet, LinkedHashMap<Integer, String> dataToSet) {
+        String[] defaultData=new String[dataToSet.size()];
+        int dataIndex=0;
+        for(Map.Entry<Integer, String> data : dataToSet.entrySet()) {
+            defaultData[dataIndex] = data.getValue();
+            dataIndex += 1;
+        }
+        ArrayAdapter<String> defaultadapter  = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, defaultData);
+        spinnerToSet.setAdapter(defaultadapter);
     }
 
     private boolean checkValidation() {
@@ -351,6 +395,11 @@ public class CreateLeadFragment extends Fragment {
             ((TextView)teamManagerSpinner.getSelectedView()).setError(getString(R.string.error_field_required));
             flag=false;
         }
+if(statusSpinner.getSelectedItemPosition()==0)
+{
+    ((TextView)statusSpinner.getSelectedView()).setError(getString(R.string.error_field_required));
+    flag=false;
+}
 
         if(loanTypeSpinner.getSelectedItemPosition()==0) {
             ((TextView)loanTypeSpinner.getSelectedView()).setError(getString(R.string.error_field_required));
@@ -390,22 +439,30 @@ public class CreateLeadFragment extends Fragment {
         for(CoApplicantModel details:coApplicantDetails)
         {
             JSONObject newModel=new JSONObject();
-            Gson gson = new Gson();
-            String json = gson.toJson(details);
+            try {
+                newModel.put("Expence",Integer.parseInt(details.getGetCoapplicantExpense().getEditText().getText().toString()));
+                newModel.put("FirstName",details.getFirstName().getEditText().getText().toString());
+                newModel.put("Income",Integer.parseInt(details.getCoapplicantIncome().getEditText().getText().toString()));
+                newModel.put("LastName",details.getLastName().getEditText().getText().toString());
+              //  newModel.put("LeadId",Integer.parseInt(details.getGetCoapplicantEx.getEditText().getText().toString()));
+                newModel.put("RelationShip",details.getRelationship().getSelectedItemPosition());
+                newModel.put("TitleType",details.getTitleSpinner().getSelectedItemPosition());
+                newModel.put("TypeofEmployee",details.getApplicantType().getSelectedItemPosition());
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+             coApplicantRecord.put(newModel);
+            //newModel
            // String =new Gson().toJson(details);
-            Log.i("valueofjsonarray", json);
+           // Log.i("valueofjsonarray", json);
         }
        // JSONArray coApplicantRecord = new JSONArray(coApplicantDetails);
         Log.i("valueofjsonarray", String.valueOf(coApplicantRecord));
-        /*String jsonArray = gson.toJson(mylist);
-        for(CoApplicantModel details:coApplicantDetails)
-        {
-            JSONObject newModel=new JSONObject();
-
-        }*/
 
       //  coApplicantRecord.put(test);
-       /* String currentDate=new CurrentDate().getCurrentdate();
+       String currentDate=new CurrentDate().getCurrentdate();
         Map<String, Object> postParam= new HashMap<String, Object>();
 
         postParam.put("LeadStatus",statusSpinner.getSelectedItemPosition());
@@ -432,12 +489,16 @@ public class CreateLeadFragment extends Fragment {
         postParam.put("LoanPurposeType",loanPurposeSpinner.getSelectedItemPosition());
 
         postParam.put("IsAnyOtherLoansExist",isLoanExist);
-        postParam.put("OtherLoanAmount",loanAmount.getEditText().getText().toString());
+         postParam.put("OtherLoanAmount",loanAmount.getEditText().getText().toString());
          postParam.put("OutStandingAmount", dueAmountOfLoan.getEditText().getText().toString()); //dueamount
-         postParam.put("RunningEMI",Integer.parseInt(runningEmi.getEditText().getText().toString()));
-         postParam.put("Income",Integer.parseInt(Income.getEditText().getText().toString()));
-         postParam.put("Expense",Integer.parseInt(Expenses.getEditText().getText().toString()));
-         postParam.put("Notes", Notes.getEditText().getText().toString());
+        if(!runningEmi.getEditText().getText().toString().isEmpty())
+          postParam.put("RunningEMI",Integer.parseInt(runningEmi.getEditText().getText().toString()));
+        if(!Income.getEditText().getText().toString().isEmpty())
+        postParam.put("Income",Integer.parseInt(Income.getEditText().getText().toString()));
+        if(!Expenses.getEditText().getText().toString().isEmpty())
+            postParam.put("Expense",Integer.parseInt(Expenses.getEditText().getText().toString()));
+
+        postParam.put("Notes", Notes.getEditText().getText().toString());
         //
         postParam.put("RequestedLoanAmount",Integer.parseInt(requestedAmount.getEditText().getText().toString()));
 
@@ -463,7 +524,7 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
                         Log.i("responseofjson1",String.valueOf(response));
                         Log.i("responseofjson1",String.valueOf(saveUrl));
                         try {
-
+                            Toast.makeText(getContext(),"Created succesfully ",Toast.LENGTH_SHORT).show();
                             }
                          catch (Exception e) {
 
@@ -483,7 +544,7 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
                 });
 
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.add(stringRequest);*/
+        requestQueue.add(stringRequest);
 
 
 
@@ -509,7 +570,12 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
 
         ApplicantRelationshipSpinner=(Spinner)coapplicantdetails.findViewById(R.id.RelationshipApplicant);
        // ApplicantRelationshipSpinner.setAdapter(defaultadapter);
-        retrieveDataForDropdown(relationshipUrl, ApplicantRelationshipSpinner, ApplicantRelationshipSpinner.getItemAtPosition(0).toString());
+
+        relationshipList=localDatabase.getDropDownData(relationshipTable);
+        setDropdownValues(ApplicantRelationshipSpinner,relationshipList);
+        setDropdownValues(ApplicantTitleSpinner,titleList);
+        setDropdownValues(ApplicantTypeSpinner,employeeTypeList);
+        //retrieveDataForDropdown(relationshipUrl, ApplicantRelationshipSpinner, ApplicantRelationshipSpinner.getItemAtPosition(0).toString());
 
         coapplicantIncome=(TextInputLayout) coapplicantdetails.findViewById(R.id.coApplicantincome);
         coapplicantExpense=(TextInputLayout) coapplicantdetails.findViewById(R.id.CoApplicantExpense);
@@ -517,10 +583,7 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
         // lasName=(TextInputLayout) coapplicantdetails.findViewById(R.id.LNameApplicant);
 
 
-        if(titleAdapter.getCount()==0)
-            retrieveDataForDropdown(titleUrl, ApplicantTitleSpinner, ApplicantTitleSpinner.getItemAtPosition(0).toString());
-        if(applicantTypeAdapter.getCount()==0)
-            retrieveDataForDropdown(typeOFEmployeeUrl, ApplicantTypeSpinner, ApplicantTypeSpinner.getItemAtPosition(0).toString());
+
 
 
         // firstName.setId(counter);
@@ -556,7 +619,7 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
         super.onDetach();
     }
 
-    public void retrieveDataForDropdown(String url, final Spinner spinner, final String defaultDataForSpinner)
+   public void retrieveDataForDropdown(String url, final Spinner spinner, final String defaultDataForSpinner)
     {
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET,url,null,
                 new Response.Listener<JSONObject>() {

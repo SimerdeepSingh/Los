@@ -44,7 +44,7 @@
     <string name="typeofemployee">Select Type Of Employee</string>
     <string name="action_search">Search</string>
     <string-array name="array_status">
-        <item> Select Lesd Status </item>
+        <item> Select Lead Status </item>
     </string-array>
     <string-array name="array_title">
         <item> Select Title </item>

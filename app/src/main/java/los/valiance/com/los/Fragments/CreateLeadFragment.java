@@ -47,8 +47,10 @@ import los.valiance.com.los.Activity.MainActivity;
 import los.valiance.com.los.Activity.MenuActivity;
 import los.valiance.com.los.Database.LocalDatabase;
 import los.valiance.com.los.Helper.CurrentDate;
+import los.valiance.com.los.Helper.InternetConnectionDetector;
 import los.valiance.com.los.Helper.SessionManagement;
 import los.valiance.com.los.Model.CoApplicantModel;
+import los.valiance.com.los.Model.LeadDetails;
 import los.valiance.com.los.Model.UserModel;
 import los.valiance.com.los.R;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -121,6 +123,11 @@ LocalDatabase localDatabase;
 
     LinkedHashMap <Integer,String>statusList,titleList,stateList,sourceList,salesOfficerList,teamManagerList,loanTypeList;
     LinkedHashMap <Integer,String> loanPurposeList,employeeTypeList,relationshipList;
+    InternetConnectionDetector ICD;
+
+
+
+
     public CreateLeadFragment() {
 
         // Required empty public constructor
@@ -176,7 +183,7 @@ LocalDatabase localDatabase;
         loanPurposeSpinner=(Spinner)rootView.findViewById(R.id.loanpurpose);
         typeOfEmployeeSpinner=(Spinner)rootView.findViewById(R.id.typeofemployee);
 
-
+        ICD=new InternetConnectionDetector(getContext());
 
 
         statusList=localDatabase.getDropDownData(statusTable);
@@ -197,6 +204,8 @@ LocalDatabase localDatabase;
         setDropdownValues(loanPurposeSpinner,loanPurposeList);
         employeeTypeList=localDatabase.getDropDownData(leadTypeTable);
         setDropdownValues(typeOfEmployeeSpinner,employeeTypeList);
+
+
 
        // retrieveDataForDropdown(statusUrl,statusSpinner,statusSpinner.getItemAtPosition(0).toString());
        // retrieveDataForDropdown(titleUrl,titleSpinner, titleSpinner.getItemAtPosition(0).toString());
@@ -306,8 +315,13 @@ LocalDatabase localDatabase;
             @Override
             public void onClick(View v) {
               // validate details
-                if( checkValidation())
-                saveDataToDb();
+                if( checkValidation()) {
+                    if(ICD.isConnectingToInternet())
+                        saveDataToDb();
+                     else
+                        saveToLocalDb();
+
+                }
                /* for(CoApplicantModel el:coApplicantDetails)
                 {
 
@@ -317,6 +331,74 @@ LocalDatabase localDatabase;
         });
         //Log.i("DFDFDF","reachet43dr5");
         return rootView;
+    }
+
+    private void saveToLocalDb() {
+        JSONArray coApplicantRecord=new JSONArray();
+        if(coApplicantDetails.size()==0)
+            coApplicantRecord.put(new JSONObject());
+        for(CoApplicantModel details:coApplicantDetails)
+        {
+            JSONObject newModel=new JSONObject();
+            try {
+                newModel.put("Expence",Integer.parseInt(details.getGetCoapplicantExpense().getEditText().getText().toString()));
+                newModel.put("FirstName",details.getFirstName().getEditText().getText().toString());
+                newModel.put("Income",Integer.parseInt(details.getCoapplicantIncome().getEditText().getText().toString()));
+                newModel.put("LastName",details.getLastName().getEditText().getText().toString());
+                newModel.put("RelationShip",details.getRelationship().getSelectedItemPosition());
+                newModel.put("TitleType",details.getTitleSpinner().getSelectedItemPosition());
+                newModel.put("TypeofEmployee",details.getApplicantType().getSelectedItemPosition());
+                //  newModel.put("LeadId",Integer.parseInt(details.getGetCoapplicantEx.getEditText().getText().toString()));
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        String currentDate=new CurrentDate().getCurrentdate();
+        LeadDetails newLead=new LeadDetails();
+        newLead.setLeadStatus(statusSpinner.getSelectedItemPosition());
+        newLead.setFirstName(firstName.getEditText().getText().toString());
+        newLead.setLastName(lastName.getEditText().getText().toString());
+        newLead.setEmailId(emailId.getEditText().getText().toString());
+        newLead.setMobileNumber(mobileNumber.getEditText().getText().toString());
+        newLead.setAddressLine1(Address.getEditText().getText().toString());
+        newLead.setDistrict(citySpinner.getSelectedItemPosition());
+        newLead.setState(stateSpinner.getSelectedItemPosition());
+        newLead.setPincode(Pincode.getEditText().getText().toString());
+        newLead.setAddressTrueForPost(postalAddress.isChecked()? 1 : 0);
+        newLead.setLandmark(Landmark.getEditText().getText().toString());
+        newLead.setLeadCreatedBy(userModel.getUserId());
+        newLead.setLeadSource(sourceSpinner.getSelectedItemPosition());
+        newLead.setSalesOfficer(salesOfficerSpinner.getSelectedItemPosition());
+        newLead.setTeamManager(teamManagerSpinner.getSelectedItemPosition());
+        newLead.setDescription(Description.getEditText().getText().toString());
+        newLead.setLoanType(loanTypeSpinner.getSelectedItemPosition());
+        newLead.setLoanPurposeType(loanPurposeSpinner.getSelectedItemPosition());
+        newLead.setIsAnyOtherLoanExist(isLoanExist);
+        newLead.setOtherLoanAmount(loanAmount.getEditText().getText().toString());
+        newLead.setOutstandingAmount(dueAmountOfLoan.getEditText().getText().toString());
+
+        if(!runningEmi.getEditText().getText().toString().isEmpty())
+        newLead.setRunningEmi(Integer.parseInt(runningEmi.getEditText().getText().toString()));
+        if(!Income.getEditText().getText().toString().isEmpty())
+        newLead.setIncome(Integer.parseInt(Income.getEditText().getText().toString()));
+        if(!Expenses.getEditText().getText().toString().isEmpty())
+        newLead.setExpense(Integer.parseInt(Expenses.getEditText().getText().toString()));
+
+        newLead.setNotes(Notes.getEditText().getText().toString());
+        newLead.setRequestedLoanAmount(Integer.parseInt(requestedAmount.getEditText().getText().toString()));
+        newLead.setRequestedLoanTenureInYears(Integer.parseInt(requestedLoanTenure.getEditText().getText().toString()));
+        newLead.setStrLeadCreatedDate(currentDate);
+        newLead.setStrLeadModifyDate(currentDate);
+        newLead.setLoanDate(currentDate);
+        newLead.setStrTimeFrameDate(currentDate);
+        newLead.setTypeOfEmployment(typeOfEmployeeSpinner.getSelectedItemPosition());
+        newLead.setIsApplyingWithCoApplicant(isApplyingWithCoApplicant);
+        newLead.setTitleType(titleSpinner.getSelectedItemPosition());
+        newLead.setLeadCoapplicantDetails(String.valueOf(coApplicantRecord));
+
+
     }
 
     private void setDropdownValues(Spinner spinnerToSet, LinkedHashMap<Integer, String> dataToSet) {
@@ -436,6 +518,8 @@ if(statusSpinner.getSelectedItemPosition()==0)
 
     private void saveDataToDb() {
         JSONArray coApplicantRecord=new JSONArray();
+        if(coApplicantDetails.size()==0)
+            coApplicantRecord.put(new JSONObject());
         for(CoApplicantModel details:coApplicantDetails)
         {
             JSONObject newModel=new JSONObject();
@@ -454,14 +538,9 @@ if(statusSpinner.getSelectedItemPosition()==0)
                 e.printStackTrace();
             }
              coApplicantRecord.put(newModel);
-            //newModel
-           // String =new Gson().toJson(details);
-           // Log.i("valueofjsonarray", json);
         }
-       // JSONArray coApplicantRecord = new JSONArray(coApplicantDetails);
         Log.i("valueofjsonarray", String.valueOf(coApplicantRecord));
 
-      //  coApplicantRecord.put(test);
        String currentDate=new CurrentDate().getCurrentdate();
         Map<String, Object> postParam= new HashMap<String, Object>();
 
@@ -489,14 +568,29 @@ if(statusSpinner.getSelectedItemPosition()==0)
         postParam.put("LoanPurposeType",loanPurposeSpinner.getSelectedItemPosition());
 
         postParam.put("IsAnyOtherLoansExist",isLoanExist);
+
+        if(loanAmount.getEditText().getText().toString().isEmpty())
+            postParam.put("OtherLoanAmount","0");
+        else
          postParam.put("OtherLoanAmount",loanAmount.getEditText().getText().toString());
+        if(dueAmountOfLoan.getEditText().getText().toString().isEmpty())
+            postParam.put("OutStandingAmount", "0");
+            else
          postParam.put("OutStandingAmount", dueAmountOfLoan.getEditText().getText().toString()); //dueamount
         if(!runningEmi.getEditText().getText().toString().isEmpty())
           postParam.put("RunningEMI",Integer.parseInt(runningEmi.getEditText().getText().toString()));
+        else
+            postParam.put("RunningEMI","0");
+
         if(!Income.getEditText().getText().toString().isEmpty())
         postParam.put("Income",Integer.parseInt(Income.getEditText().getText().toString()));
+
+
         if(!Expenses.getEditText().getText().toString().isEmpty())
             postParam.put("Expense",Integer.parseInt(Expenses.getEditText().getText().toString()));
+
+
+
 
         postParam.put("Notes", Notes.getEditText().getText().toString());
         //
@@ -522,7 +616,7 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
                     public void onResponse(JSONObject response) {
 
                         Log.i("responseofjson1",String.valueOf(response));
-                        Log.i("responseofjson1",String.valueOf(saveUrl));
+                        Log.i("responseofjsonurl",String.valueOf(saveUrl));
                         try {
                             Toast.makeText(getContext(),"Created succesfully ",Toast.LENGTH_SHORT).show();
                             }
@@ -538,7 +632,7 @@ Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+Log.i("responseofjson1", String.valueOf(error.getMessage()));
                         Toast.makeText(getContext(),"Internal Error",Toast.LENGTH_SHORT).show();
                     }
                 });

@@ -1,7 +1,5 @@
 package los.valiance.com.los.Model;
 
-import org.json.JSONArray;
-
 /**
  * Created by admin2 on 20-10-2016.
  */
@@ -23,6 +21,67 @@ public class LeadDetails {
     private String  Notes;
     private String  outstandingAmount;
     private String  Pincode;
+    private String strLeadCreatedDate;
+    private String strLeadModifyDate;
+    private String LoanDate;
+    private String strTimeFrameDate;
+    private String LeadCoapplicantDetails;
+
+    public String getStrLeadCreatedDate() {
+        return strLeadCreatedDate;
+    }
+
+    public void setStrLeadCreatedDate(String strLeadCreatedDate) {
+        this.strLeadCreatedDate = strLeadCreatedDate;
+    }
+
+    public String getStrLeadModifyDate() {
+        return strLeadModifyDate;
+    }
+
+    public void setStrLeadModifyDate(String strLeadModifyDate) {
+        this.strLeadModifyDate = strLeadModifyDate;
+    }
+
+    public String getLoanDate() {
+        return LoanDate;
+    }
+
+    public void setLoanDate(String loanDate) {
+        LoanDate = loanDate;
+    }
+
+    public String getStrTimeFrameDate() {
+        return strTimeFrameDate;
+    }
+
+    public void setStrTimeFrameDate(String strTimeFrameDate) {
+        this.strTimeFrameDate = strTimeFrameDate;
+    }
+
+    public String getLeadCoapplicantDetails() {
+        return LeadCoapplicantDetails;
+    }
+
+    public void setLeadCoapplicantDetails(String leadCoapplicantDetails) {
+        LeadCoapplicantDetails = leadCoapplicantDetails;
+    }
+
+    public String getIsAnyOtherLoanExist() {
+        return isAnyOtherLoanExist;
+    }
+
+    public void setIsAnyOtherLoanExist(String isAnyOtherLoanExist) {
+        this.isAnyOtherLoanExist = isAnyOtherLoanExist;
+    }
+
+    public String getIsApplyingWithCoApplicant() {
+        return isApplyingWithCoApplicant;
+    }
+
+    public void setIsApplyingWithCoApplicant(String isApplyingWithCoApplicant) {
+        this.isApplyingWithCoApplicant = isApplyingWithCoApplicant;
+    }
 
     public String getLoanId() {
         return loanId;
@@ -216,11 +275,11 @@ public class LeadDetails {
         this.loanType = loanType;
     }
 
-    public int getOtherLoanAmount() {
+    public String getOtherLoanAmount() {
         return otherLoanAmount;
     }
 
-    public void setOtherLoanAmount(int otherLoanAmount) {
+    public void setOtherLoanAmount(String otherLoanAmount) {
         this.otherLoanAmount = otherLoanAmount;
     }
 
@@ -288,27 +347,27 @@ public class LeadDetails {
         this.typeOfEmployment = typeOfEmployment;
     }
 
-    public boolean isAddressTrueForPost() {
+    public int isAddressTrueForPost() {
         return AddressTrueForPost;
     }
 
-    public void setAddressTrueForPost(boolean addressTrueForPost) {
+    public void setAddressTrueForPost(int addressTrueForPost) {
         AddressTrueForPost = addressTrueForPost;
     }
 
-    public boolean isAnyOtherLoanExist() {
+    public String isAnyOtherLoanExist() {
         return isAnyOtherLoanExist;
     }
 
-    public void setAnyOtherLoanExist(boolean anyOtherLoanExist) {
+    public void setAnyOtherLoanExist(String anyOtherLoanExist) {
         isAnyOtherLoanExist = anyOtherLoanExist;
     }
 
-    public boolean isApplyingWithCoApplicant() {
+    public String isApplyingWithCoApplicant() {
         return isApplyingWithCoApplicant;
     }
 
-    public void setApplyingWithCoApplicant(boolean applyingWithCoApplicant) {
+    public void setApplyingWithCoApplicant(String applyingWithCoApplicant) {
         isApplyingWithCoApplicant = applyingWithCoApplicant;
     }
 
@@ -328,7 +387,7 @@ public class LeadDetails {
     private int  leadStatus;
     private int  loanPurposeType;
     private int  loanType;
-    private int  otherLoanAmount;
+    private String  otherLoanAmount;
     private int  requestedLoanAmount;
     private int  requestedLoanTenureInYears;
     private int  runningEmi;
@@ -338,9 +397,9 @@ public class LeadDetails {
     private int  titleType;
     private int  typeOfEmployment;
 
-    private boolean AddressTrueForPost;
-    private boolean isAnyOtherLoanExist;
-    private boolean isApplyingWithCoApplicant;
+    private int AddressTrueForPost;
+    private String isAnyOtherLoanExist;
+    private String isApplyingWithCoApplicant;
     private boolean isProcessingFee;
 
 

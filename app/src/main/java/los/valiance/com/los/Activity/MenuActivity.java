@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import los.valiance.com.los.Fragments.CreateLeadFragment;
+import los.valiance.com.los.Fragments.ViewFragment;
 import los.valiance.com.los.Fragments.emo;
 import los.valiance.com.los.R;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -85,6 +86,7 @@ public class MenuActivity extends AppCompatActivity {
         Log.i("reachedhere","FDFDFD");
         Intent intent = new Intent(MenuActivity.this, MainActivity.class);
         intent.putExtra("fragmentnumber",String.valueOf(pos));
+        intent.putExtra("isDataAvailable","0");
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -93,36 +95,8 @@ public class MenuActivity extends AppCompatActivity {
         finish();
     }
 
-    public void displayView(int position) {
-        Fragment fragment = null;
-        String title = getString(R.string.app_name);
 
 
-        switch (position) {
-
-           /* case 1:
-                fragment = new CreateLeadFragment();
-                title = "Create Lead Form";
-                break;*/
-            default:
-                fragment = new CreateLeadFragment();
-                title = "Create Lead Form";
-                break;
 
 
-        }
-        if (fragment != null) {
-            Log.i("DFDFDF","reached");
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.container_body, fragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-            getSupportActionBar().setTitle(title);
-
-        }
-
-
-    }
 }

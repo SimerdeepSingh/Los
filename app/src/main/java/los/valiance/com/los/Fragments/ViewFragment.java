@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.BoolRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
@@ -97,6 +98,41 @@ public class ViewFragment extends Fragment {
                                 newLead.setLastName(getAllLeads.getJSONObject(totalLeads).getString("LastName"));
                                 newLead.setLoanPurposeType(Integer.parseInt(getAllLeads.getJSONObject(totalLeads).getString("LoanPurposeType")));
                                 newLead.setLoanType(Integer.parseInt(getAllLeads.getJSONObject(totalLeads).getString("LoanType")));
+
+                                newLead.setLeadStatus(Integer.parseInt(getAllLeads.getJSONObject(totalLeads).getString("LeadStatus")));
+                                newLead.setTitleType(Integer.parseInt(getAllLeads.getJSONObject(totalLeads).getString("TitleType")));
+                                newLead.setEmailId(getAllLeads.getJSONObject(totalLeads).getString("ContactEmail"));
+                                newLead.setMobileNumber((getAllLeads.getJSONObject(totalLeads).getString("ContactPhone")));
+
+                                newLead.setAddressLine1(getAllLeads.getJSONObject(totalLeads).getString("AddressLine1"));
+                                newLead.setState(Integer.parseInt(getAllLeads.getJSONObject(totalLeads).getString("State")));
+                                newLead.setDistrict(Integer.parseInt(getAllLeads.getJSONObject(totalLeads).getString("District")));
+                                newLead.setPincode((getAllLeads.getJSONObject(totalLeads).getString("Pin")));
+
+                                newLead.setAddressTrueForPost(Boolean.parseBoolean(getAllLeads.getJSONObject(totalLeads).getString("AddressTrueForPost"))?1:0);
+                                newLead.setLandmark(getAllLeads.getJSONObject(totalLeads).getString("Landmark"));
+                                newLead.setLeadSource(Integer.parseInt((getAllLeads.getJSONObject(totalLeads).getString("LeadSource"))));
+                                newLead.setSalesOfficer(Integer.parseInt(getAllLeads.getJSONObject(totalLeads).getString("SalesOfficer")));
+                                newLead.setTeamManager(Integer.parseInt((getAllLeads.getJSONObject(totalLeads).getString("TeamManager"))));
+
+                                newLead.setDescription(getAllLeads.getJSONObject(totalLeads).getString("Description"));
+
+                                newLead.setIsAnyOtherLoanExist(String.valueOf(Boolean.parseBoolean(getAllLeads.getJSONObject(totalLeads).getString("IsAnyOtherLoansExist"))?1:0));
+
+                                newLead.setOtherLoanAmount(getAllLeads.getJSONObject(totalLeads).getString("OtherLoanAmount"));
+                                newLead.setOutstandingAmount(getAllLeads.getJSONObject(totalLeads).getString("OutStandingAmount"));
+                                newLead.setRunningEmi((int) Double.parseDouble(getAllLeads.getJSONObject(totalLeads).getString("RunningEMI")));
+
+                                newLead.setTypeOfEmployment(Integer.parseInt(getAllLeads.getJSONObject(totalLeads).getString("LoanType")));
+                                newLead.setIncome((int) Double.parseDouble(getAllLeads.getJSONObject(totalLeads).getString("Income")));
+                                newLead.setExpense((int) Double.parseDouble(getAllLeads.getJSONObject(totalLeads).getString("Expense")));
+                                newLead.setNotes(getAllLeads.getJSONObject(totalLeads).getString("Notes"));
+
+                                newLead.setRequestedLoanAmount((int) Double.parseDouble(getAllLeads.getJSONObject(totalLeads).getString("RequestedLoanAmount")));
+                                newLead.setRequestedLoanTenureInYears((int) Double.parseDouble(getAllLeads.getJSONObject(totalLeads).getString("RequestedLoanTenureInYears")));
+                                newLead.setIsApplyingWithCoApplicant(getAllLeads.getJSONObject(totalLeads).getString("IsApplyingWithCoApplicant"));
+                                newLead.setLeadCoapplicantDetails(getAllLeads.getJSONObject(totalLeads).getString("LeadCoapplicantDetails"));
+
                                 leadDetails.add(newLead);
                                 Log.i("leadvalues123", String.valueOf(newLead.getLeadId()));
                             }
@@ -137,7 +173,6 @@ public class ViewFragment extends Fragment {
             list.setAdapter(adapter);
         } else {
             Toast.makeText(getContext(),"fdfdfd",Toast.LENGTH_SHORT).show();
-         //   NoContactMsg.setVisibility(View.VISIBLE);
         }
         list.setItemsCanFocus(true);
         //registerForContextMenu(list);

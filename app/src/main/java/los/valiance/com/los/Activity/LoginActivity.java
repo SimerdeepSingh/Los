@@ -34,6 +34,8 @@ import los.valiance.com.los.Helper.SessionManagement;
 import los.valiance.com.los.Model.UserModel;
 import los.valiance.com.los.R;
 
+import static los.valiance.com.los.Helper.Constants.cityTable;
+import static los.valiance.com.los.Helper.Constants.cityUrl;
 import static los.valiance.com.los.Helper.Constants.leadTypeTable;
 import static los.valiance.com.los.Helper.Constants.loanPurposeTable;
 import static los.valiance.com.los.Helper.Constants.loanPurposeUrl;
@@ -80,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
         user=session.getUserDetails();
         localDatabase=new LocalDatabase(getBaseContext());
 
-        retrieveDataForDropdown(statusUrl,statusTable, getResources().getStringArray(R.array.array_status)[0]);
+        /*retrieveDataForDropdown(statusUrl,statusTable, getResources().getStringArray(R.array.array_status)[0]);
         retrieveDataForDropdown(titleUrl,titleTable,getResources().getStringArray(R.array.array_title)[0]);
         retrieveDataForDropdown(stateUrl,stateTable,getResources().getStringArray(R.array.array_state)[0]);
         retrieveDataForDropdown(sourceUrl,sourceTable,getResources().getStringArray(R.array.array_source)[0]);
@@ -89,7 +91,8 @@ public class LoginActivity extends AppCompatActivity {
         retrieveDataForDropdown(loanTypeUrl,loanTypeTable,getResources().getStringArray(R.array.array_loantype)[0]);
         retrieveDataForDropdown(loanPurposeUrl,loanPurposeTable,getResources().getStringArray(R.array.array_loanpurpose)[0]);
         retrieveDataForDropdown(typeOFEmployeeUrl,leadTypeTable,getResources().getStringArray(R.array.array_typeofemployee)[0]);
-        retrieveDataForDropdown(relationshipUrl,relationshipTable,getResources().getStringArray(R.array.array_relationship)[0]);
+        retrieveDataForDropdown(relationshipUrl,relationshipTable,getResources().getStringArray(R.array.array_relationship)[0]);*/
+
         if(user==null) {
 
             // Comment for testing purpose

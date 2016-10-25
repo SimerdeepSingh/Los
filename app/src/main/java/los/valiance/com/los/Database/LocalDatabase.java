@@ -197,5 +197,21 @@ public class LocalDatabase extends SQLiteOpenHelper {
         return dropdownDataList;
     }
 
+    public String getNameFromIdOfDropdown(String tableName,int Id) {
+        dropdownDataList = new LinkedHashMap<>();
+        String fetchdata = "select * from " + tableName+" where Id="+Id;
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        String value=null;
+        Cursor cursor = sqLiteDatabase.rawQuery(fetchdata, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+               value= cursor.getString(1);
+            } while (cursor.moveToNext());
+        }
+        sqLiteDatabase.close();
+        return value;
+    }
+
 
 }

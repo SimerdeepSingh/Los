@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 
+import los.valiance.com.los.Model.LeadDetails;
 import los.valiance.com.los.Model.UserModel;
 
 
@@ -59,8 +60,23 @@ public class SessionManagement {
         editor.commit();
     }
 
+    public void saveTemporaryViewDetails(LeadDetails leadDetails) {
 
+        Gson gson = new Gson();
+        String json = gson.toJson(leadDetails);
+        editor.putString("ViewDetails", json);
+        editor.commit();
+    }
 
+    public LeadDetails getTemporaryViewDetails() {
+        Gson gson = new Gson();
+        String json = pref.getString("ViewDetails", "");
+        if (json.isEmpty())
+            return null;
+        LeadDetails leadInfo = gson.fromJson(json, LeadDetails.class);
+        return leadInfo;
+
+    }
     public UserModel getUserDetails() {
         Gson gson = new Gson();
         String json = pref.getString("UserDetails", "");

@@ -22,6 +22,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +37,10 @@ public class MainActivity extends AppCompatActivity {
         );
         setContentView(R.layout.activity_main2);
        int fragmentToLoad=Integer.parseInt(getIntent().getExtras().getString("fragmentnumber"));
+       int isDataAvailable= Integer.parseInt(getIntent().getExtras().getString("isDataAvailable"));
         //Log.i("valuesi",getIntent().getExtras().getString("fragmentnumber"));
-        displayView(fragmentToLoad);
+
+        displayView(fragmentToLoad,isDataAvailable);
     }
 
     @Override
@@ -73,15 +76,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
     }
-    public void displayView(int position) {
+    public void displayView(int fragmentToLoad, int isDataAvailable) {
         Fragment fragment = null;
         String title = getString(R.string.app_name);
 
 
-        switch (position) {
+        switch (fragmentToLoad) {
 
            case 1:
+               Bundle bundle=new Bundle();
+               bundle.putString("isDataAvailable", String.valueOf(isDataAvailable));
                 fragment = new CreateLeadFragment();
+               fragment.setArguments(bundle);
                 title = "Create Lead Form";
                 break;
             case 2:
@@ -97,10 +103,13 @@ public class MainActivity extends AppCompatActivity {
         }
         if (fragment != null) {
             Log.i("DFDFDF","reached");
+
             FragmentManager fragmentManager = getSupportFragmentManager();
+
             fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.container_body, fragment);
+
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
             getSupportActionBar().setTitle(title);

@@ -108,7 +108,8 @@ LocalDatabase localDatabase;
 
     TextInputLayout firstName,lastName,emailId,mobileNumber,Address,Pincode,Landmark,Description,loanAmount;
     TextInputLayout dueAmountOfLoan,runningEmi,Income,Expenses,Notes,requestedAmount,requestedLoanTenure;
-
+    String isDataAvailable="0";
+    String leadId="";
 
 
 
@@ -124,7 +125,7 @@ LocalDatabase localDatabase;
     LinkedHashMap <Integer,String>statusList,titleList,stateList,sourceList,salesOfficerList,teamManagerList,loanTypeList;
     LinkedHashMap <Integer,String> loanPurposeList,employeeTypeList,relationshipList;
     InternetConnectionDetector ICD;
-
+    LeadDetails showLeadDetails;
 
 
 
@@ -148,7 +149,10 @@ LocalDatabase localDatabase;
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i("DFDFDF","reachet43d");
+
+        Bundle bundle = this.getArguments();
+        isDataAvailable = bundle.getString("isDataAvailable");
+
         View rootView = inflater.inflate(R.layout.fragment_create_lead, container, false);
         localDatabase=new LocalDatabase(getContext());
         firstName= (TextInputLayout) rootView.findViewById(R.id.FirstName);
@@ -206,25 +210,11 @@ LocalDatabase localDatabase;
         setDropdownValues(typeOfEmployeeSpinner,employeeTypeList);
 
 
-
-       // retrieveDataForDropdown(statusUrl,statusSpinner,statusSpinner.getItemAtPosition(0).toString());
-       // retrieveDataForDropdown(titleUrl,titleSpinner, titleSpinner.getItemAtPosition(0).toString());
-       // retrieveDataForDropdown(stateUrl,stateSpinner, stateSpinner.getItemAtPosition(0).toString());
-       // retrieveDataForDropdown(sourceUrl,sourceSpinner, sourceSpinner.getItemAtPosition(0).toString());
-        //retrieveDataForDropdown(salesOfficerUrl,salesOfficerSpinner, salesOfficerSpinner.getItemAtPosition(0).toString());
-      //  retrieveDataForDropdown(teamManagerUrl,teamManagerSpinner, teamManagerSpinner.getItemAtPosition(0).toString());
-      //  retrieveDataForDropdown(loanTypeUrl,loanTypeSpinner, loanTypeSpinner.getItemAtPosition(0).toString());
-     //   retrieveDataForDropdown(loanPurposeUrl,loanPurposeSpinner, loanPurposeSpinner.getItemAtPosition(0).toString());
-     //   retrieveDataForDropdown(typeOFEmployeeUrl,typeOfEmployeeSpinner, typeOfEmployeeSpinner.getItemAtPosition(0).toString());
-
         Save= (Button) rootView.findViewById(R.id.Save);
-        /*titleAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, TITLE_DATA);
-        cityAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, TITLE_DATA);
-        stateAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, TITLE_DATA);
-*/
+
 
         userModel=session.getUserDetails();
-       defaultadapter  = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, defaultData);
+        defaultadapter  = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, defaultData);
         titleAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, defaultData);
         applicantTypeAdapter =new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, defaultData);
 
@@ -232,20 +222,6 @@ LocalDatabase localDatabase;
         hiddenlayout=(RelativeLayout) rootView.findViewById(R.id.otherloanlayout);
         mainLayout=(LinearLayout)rootView.findViewById(R.id.mainlayout);
 
-
-
-//        mainLayout.addView(coapplicantdetails);
-      /*  statusSpinner.setAdapter(defaultadapter);
-        stateSpinner.setAdapter(defaultadapter);
-        citySpinner.setAdapter(defaultadapter);
-        titleSpinner.setAdapter(defaultadapter);
-        sourceSpinner.setAdapter(defaultadapter);
-        salesOfficerSpinner.setAdapter(defaultadapter);
-        salesOfficerSpinner.setAdapter(defaultadapter);
-        teamManagerSpinner.setAdapter(defaultadapter);
-        loanTypeSpinner.setAdapter(defaultadapter);
-        loanPurposeSpinner.setAdapter(defaultadapter);
-        typeOfEmployeeSpinner.setAdapter(defaultadapter);*/
 
 
 
@@ -329,6 +305,70 @@ LocalDatabase localDatabase;
                 }*/
             }
         });
+
+        if(isDataAvailable.equals("1"))
+        {
+
+            showLeadDetails=session.getTemporaryViewDetails();
+        //    Log.i("this", String.valueOf(showLeadDetails.));
+            leadId= String.valueOf(showLeadDetails.getLeadId());
+            statusSpinner.setSelection(showLeadDetails.getLeadStatus());
+            titleSpinner.setSelection(showLeadDetails.getTitleType());
+            firstName.getEditText().setText(showLeadDetails.getFirstName());
+            lastName.getEditText().setText(showLeadDetails.getLastName());
+            emailId.getEditText().setText(showLeadDetails.getEmailId());
+            mobileNumber.getEditText().setText(showLeadDetails.getMobileNumber());
+            Address.getEditText().setText(showLeadDetails.getAddressLine1());
+            stateSpinner.setSelection(showLeadDetails.getLeadStatus());
+            //citySpinner.setSelection(showLeadDetails.getDistrict());
+            Pincode.getEditText().setText(showLeadDetails.getPincode());
+            postalAddress.setChecked(showLeadDetails.isAddressTrueForPost()==1);
+            Landmark.getEditText().setText(showLeadDetails.getLandmark());
+
+           // citySpinner.setSelection(1);
+            sourceSpinner.setSelection(showLeadDetails.getLeadSource());
+            Log.i("leadsource", String.valueOf(showLeadDetails.getLeadSource()));
+            salesOfficerSpinner.setSelection(showLeadDetails.getSalesOfficer());
+            teamManagerSpinner.setSelection(showLeadDetails.getTeamManager());
+            Description.getEditText().setText(showLeadDetails.getDescription());
+            loanTypeSpinner.setSelection(showLeadDetails.getLoanType());
+            loanPurposeSpinner.setSelection(showLeadDetails.getLoanPurposeType());
+           Log.i("valueofloan", showLeadDetails.isAnyOtherLoanExist());
+            otherloandetailsyes.setChecked(showLeadDetails.isAnyOtherLoanExist().equals("1"));
+            otherloandetailsno.setChecked(!showLeadDetails.isAnyOtherLoanExist().equals("1"));
+            isLoanExist=showLeadDetails.isAnyOtherLoanExist();
+           if(showLeadDetails.isAnyOtherLoanExist().equals("1"))
+               hiddenlayout.setVisibility(View.VISIBLE);
+
+            loanAmount.getEditText().setText(showLeadDetails.getOtherLoanAmount());
+            dueAmountOfLoan.getEditText().setText(showLeadDetails.getOutstandingAmount());
+            runningEmi.getEditText().setText(String.valueOf(showLeadDetails.getRunningEmi()));
+
+            typeOfEmployeeSpinner.setSelection(showLeadDetails.getTypeOfEmployment());
+            Income.getEditText().setText(String.valueOf(showLeadDetails.getIncome()));
+            Expenses.getEditText().setText(String.valueOf(showLeadDetails.getExpense()));
+            Notes.getEditText().setText(showLeadDetails.getNotes());
+            requestedAmount.getEditText().setText(String.valueOf(showLeadDetails.getRequestedLoanAmount()));
+            requestedLoanTenure.getEditText().setText(String.valueOf(showLeadDetails.getRequestedLoanTenureInYears()));
+           // Log.i("valueofloan", showLeadDetails.isApplyingWithCoApplicant());
+            coapplicantdetailsyes.setChecked(Boolean.parseBoolean(showLeadDetails.isApplyingWithCoApplicant()));
+            coapplicantdetailsno.setChecked(!Boolean.parseBoolean(showLeadDetails.isApplyingWithCoApplicant()));
+            isApplyingWithCoApplicant= String.valueOf(Boolean.parseBoolean(showLeadDetails.isApplyingWithCoApplicant())?1:0);
+
+            Log.i("valueis", String.valueOf(isApplyingWithCoApplicant));
+            if(isApplyingWithCoApplicant.equals("1"))
+            {
+                try {
+                    Log.i("valueis", String.valueOf(showLeadDetails.getLeadCoapplicantDetails()));
+                    JSONObject jsonArray=new JSONObject(showLeadDetails.getLeadCoapplicantDetails());
+                    Log.i("valueis", String.valueOf(jsonArray));
+                } catch (JSONException e) {
+                    Log.i("valueis", e.getLocalizedMessage());
+                    e.printStackTrace();
+                }
+            }
+
+        }
         //Log.i("DFDFDF","reachet43dr5");
         return rootView;
     }
@@ -397,6 +437,7 @@ LocalDatabase localDatabase;
         newLead.setIsApplyingWithCoApplicant(isApplyingWithCoApplicant);
         newLead.setTitleType(titleSpinner.getSelectedItemPosition());
         newLead.setLeadCoapplicantDetails(String.valueOf(coApplicantRecord));
+
 
 
     }
@@ -544,6 +585,8 @@ if(statusSpinner.getSelectedItemPosition()==0)
        String currentDate=new CurrentDate().getCurrentdate();
         Map<String, Object> postParam= new HashMap<String, Object>();
 
+        if(isDataAvailable.equals("1"))
+        postParam.put("LeadID",leadId);
         postParam.put("LeadStatus",statusSpinner.getSelectedItemPosition());
         postParam.put("FirstName", firstName.getEditText().getText().toString());
         postParam.put("LastName", lastName.getEditText().getText().toString());
@@ -608,7 +651,7 @@ if(statusSpinner.getSelectedItemPosition()==0)
         postParam.put("TitleType",titleSpinner.getSelectedItemPosition());
         postParam.put("LeadCoapplicantDetails", coApplicantRecord);
 
-Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
+        Log.i("jsonsent", String.valueOf(new JSONObject(postParam)));
 
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST,saveUrl,new JSONObject(postParam),
                 new Response.Listener<JSONObject>() {
@@ -732,16 +775,22 @@ Log.i("responseofjson1", String.valueOf(error.getMessage()));
                                  JSONObject jsonValue=listOfValues.getJSONObject(value);
                                  cityId.add(jsonValue.get("ID").toString());
                                  defaultData[value+1]= jsonValue.get("Name").toString();
-                                // Log.i("responseofjson123", def);
                             }
                             defaultadapter  = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, defaultData);
-                            //defaultadapter.add("Please Select");
+
                             Log.i("responseofjson123", String.valueOf(defaultData));
                             spinner.setAdapter(defaultadapter);
-                            if(spinner.getId()==R.id.titlespinner)
-                                titleAdapter=defaultadapter;
-                            if(spinner.getId()==R.id.typeofemployee)
-                                applicantTypeAdapter=defaultadapter;
+                            Log.i("letscheck", String.valueOf(cityId));
+                            if(isDataAvailable.equals("1"))
+                            {
+                                int indexToSet=session.getTemporaryViewDetails().getDistrict()-Integer.parseInt(cityId.get(0));
+                                if(indexToSet<cityId.size())
+                                {
+                                    spinner.setSelection(indexToSet);
+                                }
+                            }
+
+
                         } catch (Exception e) {
                            Log.i("error",e.getMessage());
                             e.printStackTrace();
@@ -775,8 +824,18 @@ Log.i("responseofjson1", String.valueOf(error.getMessage()));
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_back) {
+            if(isDataAvailable.equals("1"))
+            {
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra("fragmentnumber","2");
+                intent.putExtra("isDataAvailable","0");
+                startActivity(intent);
+            }
+            else
+            {
             Intent intent = new Intent(getActivity(), MenuActivity.class);
             startActivity(intent);
+        }
         }
         return super.onOptionsItemSelected(item);
     }

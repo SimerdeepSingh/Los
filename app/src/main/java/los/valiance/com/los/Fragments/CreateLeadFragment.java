@@ -1,12 +1,9 @@
 package los.valiance.com.los.Fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,7 +28,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 
 
 import org.json.JSONArray;
@@ -53,16 +49,12 @@ import los.valiance.com.los.Model.CoApplicantModel;
 import los.valiance.com.los.Model.LeadDetails;
 import los.valiance.com.los.Model.UserModel;
 import los.valiance.com.los.R;
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static los.valiance.com.los.Helper.Constants.cityUrl;
+import static los.valiance.com.los.Helper.Constants.cityTable;
 import static los.valiance.com.los.Helper.Constants.leadTypeTable;
 import static los.valiance.com.los.Helper.Constants.loanPurposeTable;
 import static los.valiance.com.los.Helper.Constants.loanTypeTable;
 import static los.valiance.com.los.Helper.Constants.relationshipTable;
-import static los.valiance.com.los.Helper.Constants.relationshipUrl;
-import static los.valiance.com.los.Helper.Constants.rooturl;
 import static los.valiance.com.los.Helper.Constants.salesOfficerTable;
 import static los.valiance.com.los.Helper.Constants.saveUrl;
 import static los.valiance.com.los.Helper.Constants.sourceTable;
@@ -70,8 +62,6 @@ import static los.valiance.com.los.Helper.Constants.stateTable;
 import static los.valiance.com.los.Helper.Constants.statusTable;
 import static los.valiance.com.los.Helper.Constants.teamManagerTable;
 import static los.valiance.com.los.Helper.Constants.titleTable;
-import static los.valiance.com.los.Helper.Constants.titleUrl;
-import static los.valiance.com.los.Helper.Constants.typeOFEmployeeUrl;
 
 
 public class CreateLeadFragment extends Fragment {
@@ -253,7 +243,7 @@ LocalDatabase localDatabase;
             public void onClick(View v) {
                 isApplyingWithCoApplicant="1";
                 // Toast.makeText(getContext(),"Clicked no",Toast.LENGTH_SHORT).show();
-                addCoApplicant(inflater,container);
+                addCoApplicant(inflater,container, null);
 
         }});
         coapplicantdetailsno.setOnClickListener(new View.OnClickListener() {
@@ -276,9 +266,32 @@ LocalDatabase localDatabase;
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                // citySpinner.setAdapter(defaultadapter);
                 Log.i("newtext","dfdfdfd");
-                String newCityUrl=cityUrl+"/"+position;
+                LinkedHashMap<Integer,String>district=localDatabase.getDistricts(cityTable,position);
+                Log.i("hashmapvalue", String.valueOf(district.size()));
+                String defaultData[]=new String[district.size()];
+                int index=0;
+                for (Map.Entry<Integer,String> districtEntry : district.entrySet()) {
+                    defaultData[index]=districtEntry.getValue();
+                    cityId.add(String.valueOf(districtEntry.getKey()));
+                    index+=1;
+                }
+
+                defaultadapter  = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, defaultData);
+
+                Log.i("responseofjson123", String.valueOf(defaultData));
+                citySpinner.setAdapter(defaultadapter);
+                Log.i("letscheck", String.valueOf(cityId));
+                if(isDataAvailable.equals("1"))
+                {
+                    int indexToSet=session.getTemporaryViewDetails().getDistrict()-Integer.parseInt(cityId.get(0));
+                    if(indexToSet<cityId.size())
+                    {
+                        citySpinner.setSelection(indexToSet);
+                    }
+                }
+                /*String newCityUrl=cityUrl+"/"+position;
                 Log.i("newtext",cityUrl);
-                retrieveDataForDropdown(newCityUrl,citySpinner, citySpinner.getItemAtPosition(0).toString());
+                retrieveDataForDropdown(newCityUrl,citySpinner, citySpinner.getItemAtPosition(0).toString());*/
             }
 
             @Override
@@ -360,7 +373,12 @@ LocalDatabase localDatabase;
             {
                 try {
                     Log.i("valueis", String.valueOf(showLeadDetails.getLeadCoapplicantDetails()));
-                    JSONObject jsonArray=new JSONObject(showLeadDetails.getLeadCoapplicantDetails());
+                    JSONArray jsonArray=new JSONArray(showLeadDetails.getLeadCoapplicantDetails());
+                    for(int coApplicant=0;coApplicant<jsonArray.length();coApplicant++)
+                    {
+                        JSONObject jsonObject=jsonArray.getJSONObject(coApplicant);
+                        addCoApplicant(inflater,container,jsonObject);
+                    }
                     Log.i("valueis", String.valueOf(jsonArray));
                 } catch (JSONException e) {
                     Log.i("valueis", e.getLocalizedMessage());
@@ -438,6 +456,8 @@ LocalDatabase localDatabase;
         newLead.setTitleType(titleSpinner.getSelectedItemPosition());
         newLead.setLeadCoapplicantDetails(String.valueOf(coApplicantRecord));
 
+        localDatabase.addLead(newLead);
+        Log.i("unsynceddata", String.valueOf(localDatabase.getAllUnsyncedLeads()));
 
 
     }
@@ -693,7 +713,7 @@ Log.i("responseofjson1", String.valueOf(error.getMessage()));
 
 
 
-    public void addCoApplicant(LayoutInflater inflater, ViewGroup container)
+    public void addCoApplicant(LayoutInflater inflater, ViewGroup container, JSONObject jsonObject)
     {
         View coapplicantdetails=inflater.inflate(R.layout.coapplicantform, container, false);
         coapplicantfirstName=(TextInputLayout) coapplicantdetails.findViewById(R.id.FirstNameApplicant);
@@ -741,6 +761,21 @@ Log.i("responseofjson1", String.valueOf(error.getMessage()));
         coApplicantDetails.add(newModel);
         coapplicantdetailsno.setChecked(false);
 
+        if(jsonObject!=null)
+        {
+            try {
+                coapplicantfirstName.getEditText().setText(jsonObject.getString("FirstName").toString());
+                coapplicantlasName.getEditText().setText(jsonObject.getString("LastName").toString());
+                ApplicantTitleSpinner.setSelection(Integer.parseInt(jsonObject.getString("TitleType")));
+                ApplicantTypeSpinner.setSelection(Integer.parseInt(jsonObject.getString("TypeofEmployee")));
+                ApplicantRelationshipSpinner.setSelection(Integer.parseInt(jsonObject.getString("RelationShip")));
+                coapplicantIncome.getEditText().setText(jsonObject.getString("Income").toString());
+                coapplicantExpense.getEditText().setText(jsonObject.getString("Expence").toString());
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         for(CoApplicantModel el:coApplicantDetails)
         {
@@ -756,59 +791,6 @@ Log.i("responseofjson1", String.valueOf(error.getMessage()));
         super.onDetach();
     }
 
-   public void retrieveDataForDropdown(String url, final Spinner spinner, final String defaultDataForSpinner)
-    {
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET,url,null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        Log.i("responseofjson123",String.valueOf(response));
-                        try {
-
-                            JSONArray listOfValues = response.getJSONArray("DataList");
-                            defaultData= new String[listOfValues.length()+1];
-                            defaultData[0]=defaultDataForSpinner;
-                            cityId.clear();
-                            for(int value=0;value<listOfValues.length();value++)
-                            {
-                                 JSONObject jsonValue=listOfValues.getJSONObject(value);
-                                 cityId.add(jsonValue.get("ID").toString());
-                                 defaultData[value+1]= jsonValue.get("Name").toString();
-                            }
-                            defaultadapter  = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_dropdown_item_1line, defaultData);
-
-                            Log.i("responseofjson123", String.valueOf(defaultData));
-                            spinner.setAdapter(defaultadapter);
-                            Log.i("letscheck", String.valueOf(cityId));
-                            if(isDataAvailable.equals("1"))
-                            {
-                                int indexToSet=session.getTemporaryViewDetails().getDistrict()-Integer.parseInt(cityId.get(0));
-                                if(indexToSet<cityId.size())
-                                {
-                                    spinner.setSelection(indexToSet);
-                                }
-                            }
-
-
-                        } catch (Exception e) {
-                           Log.i("error",e.getMessage());
-                            e.printStackTrace();
-                        }
-
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                       // Toast.makeText(LoginActivity.this,error.getMessage(),Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-        requestQueue.add(stringRequest);
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

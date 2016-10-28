@@ -706,6 +706,7 @@
             android:layout_marginTop="@dimen/default_margin_space"
             android:layout_below="@+id/mainlayout"
             android:layout_alignParentBottom="true"
+            android:background="@drawable/shape"
             android:text="save"/>
     </RelativeLayout>
 

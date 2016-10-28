@@ -31,6 +31,7 @@ import java.util.Map;
 import los.valiance.com.los.Database.LocalDatabase;
 import los.valiance.com.los.Helper.InternetConnectionDetector;
 import los.valiance.com.los.Helper.SessionManagement;
+import los.valiance.com.los.Model.CityModel;
 import los.valiance.com.los.Model.UserModel;
 import los.valiance.com.los.R;
 
@@ -82,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         user=session.getUserDetails();
         localDatabase=new LocalDatabase(getBaseContext());
 
-        /*retrieveDataForDropdown(statusUrl,statusTable, getResources().getStringArray(R.array.array_status)[0]);
+       /* retrieveDataForDropdown(statusUrl,statusTable, getResources().getStringArray(R.array.array_status)[0]);
         retrieveDataForDropdown(titleUrl,titleTable,getResources().getStringArray(R.array.array_title)[0]);
         retrieveDataForDropdown(stateUrl,stateTable,getResources().getStringArray(R.array.array_state)[0]);
         retrieveDataForDropdown(sourceUrl,sourceTable,getResources().getStringArray(R.array.array_source)[0]);
@@ -91,8 +92,8 @@ public class LoginActivity extends AppCompatActivity {
         retrieveDataForDropdown(loanTypeUrl,loanTypeTable,getResources().getStringArray(R.array.array_loantype)[0]);
         retrieveDataForDropdown(loanPurposeUrl,loanPurposeTable,getResources().getStringArray(R.array.array_loanpurpose)[0]);
         retrieveDataForDropdown(typeOFEmployeeUrl,leadTypeTable,getResources().getStringArray(R.array.array_typeofemployee)[0]);
-        retrieveDataForDropdown(relationshipUrl,relationshipTable,getResources().getStringArray(R.array.array_relationship)[0]);*/
-
+        retrieveDataForDropdown(relationshipUrl,relationshipTable,getResources().getStringArray(R.array.array_relationship)[0]);
+        retrieveDataForCityDropdown(cityUrl,cityTable,getResources().getStringArray(R.array.array_city)[0]);*/
         if(user==null) {
 
             // Comment for testing purpose
@@ -220,10 +221,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             Log.i("responseofjson123", String.valueOf(dropdownData));
                             localDatabase.addDropDownData(tableName,dropdownData);
-                           /* if(spinner.getId()==R.id.titlespinner)
-                                titleAdapter=defaultadapter;
-                            if(spinner.getId()==R.id.typeofemployee)
-                                applicantTypeAdapter=defaultadapter;*/
+
                         } catch (Exception e) {
                             Log.i("error",e.getMessage());
                             e.printStackTrace();
@@ -243,6 +241,59 @@ public class LoginActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+
+    public void retrieveDataForCityDropdown(String url, final String tableName, final String defaultDataForSpinner)
+    {
+        Log.i("value",defaultDataForSpinner);
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET,url,null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.i("responseofjson123",String.valueOf(response));
+                        try {
+
+                            JSONArray listOfValues = response.getJSONArray("DataList");
+
+                            ArrayList<CityModel>cityData=new ArrayList<>();
+                            CityModel defaultModel=new CityModel();
+                            defaultModel.setCityId(0);
+                            defaultModel.setName(defaultDataForSpinner);
+                            defaultModel.setStateId(0);
+
+                            cityData.add(defaultModel);
+                            for(int value=0;value<listOfValues.length();value++)
+                            {
+                                JSONObject jsonValue=listOfValues.getJSONObject(value);
+                                CityModel newModel=new CityModel();
+                                newModel.setCityId( Integer.parseInt(jsonValue.get("ID").toString()));
+                                newModel.setName(jsonValue.get("Name").toString());
+                                newModel.setStateId(Integer.parseInt(jsonValue.get("StateID").toString()));
+                                cityData.add(newModel);
+                                // Log.i("responseofjson123", def);
+                            }
+
+                            Log.i("responseofjson123", String.valueOf(dropdownData));
+                            localDatabase.addDistrictData(tableName,cityData);
+
+                        } catch (Exception e) {
+                            Log.i("error",e.getMessage());
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Toast.makeText(LoginActivity.this,error.getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
 
 
 }

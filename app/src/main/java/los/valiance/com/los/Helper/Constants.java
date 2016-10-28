@@ -4,7 +4,7 @@ package los.valiance.com.los.Helper;
  * Created by admin2 on 12-10-2016.
  */
 public class Constants {
-    public static String rooturl="http://192.168.1.69:3322/LoanService.svc";
+    public static String rooturl="http://122.176.55.103:3322/LoanService.svc";
     public static String statusUrl=rooturl+"/GetAllLeadStatus";//";
     public static String titleUrl=rooturl+"/GetTitleTypes";//";
     public static String stateUrl=rooturl+"/GetAllState";//";
@@ -15,7 +15,7 @@ public class Constants {
     public static String loanPurposeUrl=rooturl+"/GetAllLoanPurposeType";//";
     public static String typeOFEmployeeUrl=rooturl+"/GetAllEmployeeType";//";
     public static String relationshipUrl=rooturl+"/GetAllRelationshipType";//";
-    public static String cityUrl=rooturl+"/GetAllDistrict";//";
+    public static String cityUrl=rooturl+"/GetAllDistrictsWithStateID";//";
 
     public static String saveUrl=rooturl+"/AddUpdateLoanLeadEnquiry";
 
@@ -31,5 +31,7 @@ public class Constants {
     public static String leadTypeTable="TypeList";
     public static String relationshipTable="RelationshipList";
     public static String createLeadTable="LeadCreation";
+    public static String verificationTable="VerificationList";
 
+   public static int IMAGE_SIZE = 96 * 120;
 }

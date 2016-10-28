@@ -122,7 +122,7 @@ public class LeadDetailsAdapter extends BaseAdapter implements Filterable {
                 ArrayList<LeadDetails> filterList = new ArrayList<>();
                 for (int i = 0; i < mStringFilterList.size(); i++) {
                     if ((mStringFilterList.get(i).getFirstName().toUpperCase())
-                            .contains(constraint.toString().toUpperCase())) {
+                            .contains(constraint.toString().toUpperCase()) || String.valueOf(mStringFilterList.get(i).getLeadId()).contains(constraint.toString())) {
 
                         filterList.add(mStringFilterList.get(i));
                     }

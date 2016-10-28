@@ -119,14 +119,14 @@
             />
 
         <Button
-            android:id="@+id/btn_dummy"
+            android:id="@+id/btn_verification"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="30dp"
             android:paddingBottom="15dp"
             android:layout_weight="1"
             android:drawableTop="@drawable/createlead"
-            android:text="Reports"
+            android:text="Verification"
             android:layout_marginLeft="@dimen/spacebetweenbuttons"
             android:textColor="@color/menutext"
             android:background="@android:drawable/dialog_holo_light_frame" />

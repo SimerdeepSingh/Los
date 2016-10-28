@@ -7,9 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import los.valiance.com.los.Model.CityModel;
 import los.valiance.com.los.Model.LeadDetails;
 
 import static los.valiance.com.los.Helper.Constants.cityTable;
@@ -24,6 +26,7 @@ import static los.valiance.com.los.Helper.Constants.stateTable;
 import static los.valiance.com.los.Helper.Constants.statusTable;
 import static los.valiance.com.los.Helper.Constants.teamManagerTable;
 import static los.valiance.com.los.Helper.Constants.titleTable;
+import static los.valiance.com.los.Helper.Constants.verificationTable;
 
 /**
  * Created by admin2 on 21-10-2016.
@@ -32,7 +35,6 @@ import static los.valiance.com.los.Helper.Constants.titleTable;
 public class LocalDatabase extends SQLiteOpenHelper {
     LinkedHashMap<Integer, String> dropdownDataList;
     ArrayList<LeadDetails> leadDetails;
-
     public LocalDatabase(Context context) {
         super(context, "Los", null, 1);
     }
@@ -42,7 +44,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
         String leadStatusList = "create table " + statusTable + "(Id Int ,Name String)";
         String leadTitleList = "create table " + titleTable + "(Id Int ,Name String)";
         String StateList = "create table " + stateTable + "(Id Int ,Name String)";
-        String CityList = "create table CityList" + cityTable + "(Id Int ,Name String)";
+        String CityList = "create table " + cityTable + "(cityId Int ,Name String,stateId Int)";
         String SourceList = "create table " + sourceTable + "(Id Int ,Name String)";
         String SalesOfficerList = "create table " + salesOfficerTable + "(Id Int ,Name String)";
         String TeamManagerList = "create table " + teamManagerTable + "(Id Int ,Name String)";
@@ -56,6 +58,8 @@ public class LocalDatabase extends SQLiteOpenHelper {
                 ",OutStandingAmount String,RunningEMI Int,Income Int,Expense Int,Notes String,RequestedLoanAmount Int,RequestedLoanTenureInYears Int" +
                 ",strLeadCreatedDate String,strLeadModifyDate String,LoanDate String,strTimeFrameDate String,TypeOfEmployement Int,IsApplyingWithCoApplicant String" +
                 ",TitleType Int,LeadCoapplicantDetails String)";
+
+        String VerificationList="create table " + verificationTable + "(UserId Int,LeadId Int ,Image1 String,Image2 String)";
         // String LeadDetails=""
 
         db.execSQL(leadStatusList);
@@ -70,6 +74,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
         db.execSQL(TypeList);
         db.execSQL(RelationshipList);
         db.execSQL(LeadCreation);
+        db.execSQL(VerificationList);
     }
 
     @Override
@@ -77,6 +82,7 @@ public class LocalDatabase extends SQLiteOpenHelper {
 
     }
 
+    //public void addVerificationDetails
     public void addLead(LeadDetails leadDetails) {
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
 
@@ -182,6 +188,37 @@ public class LocalDatabase extends SQLiteOpenHelper {
         }
     }
 
+    public void addDistrictData(String tableName,ArrayList<CityModel> cityModel)
+    {
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        for (CityModel details:cityModel) {
+            ContentValues values = new ContentValues();
+            values.put("cityId", details.getCityId());
+            values.put("Name", details.getName());
+            values.put("stateId", details.getStateId());
+            sqLiteDatabase.insert(tableName, null, values);
+        }
+    }
+
+    public LinkedHashMap<Integer, String> getDistricts(String tableName, int stateId)
+    {
+        LinkedHashMap<Integer,String>cityArray=new LinkedHashMap<>();
+
+        String fetchdata = "select * from " + tableName+" where stateId="+stateId;
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery(fetchdata, null);
+
+        int index=0;
+        if (cursor.moveToFirst()) {
+            do {
+
+                cityArray.put(cursor.getInt(0),cursor.getString(1));
+            } while (cursor.moveToNext());
+        }
+        sqLiteDatabase.close();
+        return cityArray;
+
+    }
     public LinkedHashMap<Integer, String> getDropDownData(String tableName) {
         dropdownDataList = new LinkedHashMap<>();
         String fetchdata = "select * from " + tableName;
@@ -212,6 +249,5 @@ public class LocalDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.close();
         return value;
     }
-
 
 }

@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import los.valiance.com.los.Adapters.VerificationAdapter;
 import los.valiance.com.los.Fragments.CreateLeadFragment;
 import los.valiance.com.los.Fragments.ViewFragment;
 import los.valiance.com.los.Fragments.emo;
@@ -21,7 +22,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MenuActivity extends AppCompatActivity {
 
-    Button createLead,searchLead,searchLoan,aboutUs,reports;
+    Button createLead,searchLead,searchLoan,aboutUs,reports,Verification;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +37,7 @@ public class MenuActivity extends AppCompatActivity {
         searchLoan= (Button) findViewById(R.id.btn_searchloan);
         aboutUs= (Button) findViewById(R.id.btn_aboutus);
         reports= (Button) findViewById(R.id.btn_reports);
-
+        Verification= (Button) findViewById(R.id.btn_verification);
         createLead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,6 +70,12 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MenuActivity.this,"Under Progress",Toast.LENGTH_SHORT).show();
+            }
+        });
+        Verification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openfragment(3);
             }
         });
 

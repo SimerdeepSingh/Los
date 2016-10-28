@@ -1,7 +1,11 @@
 package los.valiance.com.los.Activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import los.valiance.com.los.Fragments.CreateLeadFragment;
+import los.valiance.com.los.Fragments.VerificationFragment;
 import los.valiance.com.los.Fragments.ViewFragment;
 import los.valiance.com.los.Fragments.emo;
 import los.valiance.com.los.R;
@@ -22,7 +27,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-
+    private static final int CAMERA_REQUEST = 1888;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +99,11 @@ public class MainActivity extends AppCompatActivity {
                 fragment=new ViewFragment();
                 title="View Lead";
                 break;
+            case 3:
+                fragment=new VerificationFragment();
+                title="Verification";
+                break;
+
             default:
                 fragment = new emo();
                 title = "Create Lead Form";
@@ -117,5 +127,34 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public void setImage(int leadId)
+    {
+
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, CAMERA_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            Bitmap mphoto = (Bitmap) data.getExtras().get("data");
+        Log.i("imagereceived", String.valueOf(mphoto));
+        }
+       /* super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            fragment.onActivityResult(requestCode, resultCode, data);
+        }*/
+     //   Log.i("reached123", data.getStringExtra(MediaStore.EXTRA_OUTPUT));
+       /* if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
+            beginCrop(data.getData());
+        } else if (requestCode == 1 && resultCode == RESULT_OK) {
+            final Uri image = Uri.parse(currentPhotoPath);
+            beginCrop(Uri.parse(currentPhotoPath));
+        } else if (requestCode == Crop.REQUEST_CROP) {
+            handleCrop(resultCode, data);
+        }*/
     }
 }

@@ -40,7 +40,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.MenuActivity" />
-        <activity android:name=".Activity.MainActivity"></activity>
+        <activity android:name=".Activity.MainActivity" />
+        <activity
+            android:name=".Activity.VerificationActivity"
+            android:label="@string/title_activity_verification"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

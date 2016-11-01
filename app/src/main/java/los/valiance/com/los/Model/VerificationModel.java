@@ -1,5 +1,7 @@
 package los.valiance.com.los.Model;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by admin2 on 27-10-2016.
  */
@@ -7,7 +9,7 @@ package los.valiance.com.los.Model;
 public class VerificationModel {
     int leadId;
     int verifierId;
-    String image1;
+    Bitmap image1;
     String image2;
 
     public String getImage3() {
@@ -26,11 +28,11 @@ public class VerificationModel {
         this.image2 = image2;
     }
 
-    public String getImage1() {
+    public Bitmap getImage1() {
         return image1;
     }
 
-    public void setImage1(String image1) {
+    public void setImage1(Bitmap image1) {
         this.image1 = image1;
     }
 

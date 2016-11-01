@@ -16,10 +16,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
+import los.valiance.com.los.Adapters.VerificationAdapter;
 import los.valiance.com.los.Fragments.CreateLeadFragment;
 import los.valiance.com.los.Fragments.VerificationFragment;
 import los.valiance.com.los.Fragments.ViewFragment;
 import los.valiance.com.los.Fragments.emo;
+import los.valiance.com.los.Model.VerificationModel;
 import los.valiance.com.los.R;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -27,7 +31,10 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-    private static final int CAMERA_REQUEST = 1888;
+
+    private List<VerificationModel>verificationdetails;
+    int position;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,8 +107,17 @@ public class MainActivity extends AppCompatActivity {
                 title="View Lead";
                 break;
             case 3:
-                fragment=new VerificationFragment();
-                title="Verification";
+                Intent intent = new Intent(MainActivity.this, VerificationActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+
+
+               /* fragment=new VerificationFragment();
+                title="Verification";*/
                 break;
 
             default:
@@ -129,32 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void setImage(int leadId)
-    {
 
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, CAMERA_REQUEST);
-    }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-            Bitmap mphoto = (Bitmap) data.getExtras().get("data");
-        Log.i("imagereceived", String.valueOf(mphoto));
-        }
-       /* super.onActivityResult(requestCode, resultCode, data);
-        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-            fragment.onActivityResult(requestCode, resultCode, data);
-        }*/
-     //   Log.i("reached123", data.getStringExtra(MediaStore.EXTRA_OUTPUT));
-       /* if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
-            beginCrop(data.getData());
-        } else if (requestCode == 1 && resultCode == RESULT_OK) {
-            final Uri image = Uri.parse(currentPhotoPath);
-            beginCrop(Uri.parse(currentPhotoPath));
-        } else if (requestCode == Crop.REQUEST_CROP) {
-            handleCrop(resultCode, data);
-        }*/
-    }
+
 }

@@ -15,22 +15,30 @@
 
         <ImageButton
             android:id="@+id/upload_image1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_centerInParent="true"
             android:scaleType="fitXY"
             android:background="@drawable/plussymbol"
-           />
-       <!-- <Button
-            android:id="@+id/uploadphoto1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            />
+        <ImageButton
+            android:id="@+id/upload_image2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/default_padding_top"
-            android:layout_marginLeft="@dimen/default_padding_top"
-            android:text="Verify Address"
-            android:textSize="@dimen/view_leads_size"/>-->
+            android:scaleType="fitXY"
+            android:background="@drawable/plussymbol"
+            />
+        <!-- <Button
+             android:id="@+id/uploadphoto1"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:layout_centerInParent="true"
+             android:layout_gravity="center"
+             android:layout_marginTop="@dimen/default_padding_top"
+             android:layout_marginLeft="@dimen/default_padding_top"
+             android:text="Verify Address"
+             android:textSize="@dimen/view_leads_size"/>-->
 
 
     </LinearLayout>

@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ExpandableListView;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
@@ -39,6 +40,7 @@ import java.util.Map;
 
 import los.valiance.com.los.Activity.MainActivity;
 import los.valiance.com.los.Activity.MenuActivity;
+import los.valiance.com.los.Activity.VerificationActivity;
 import los.valiance.com.los.Fragments.VerificationFragment;
 import los.valiance.com.los.Helper.Permission;
 import los.valiance.com.los.Model.LeadDetails;
@@ -59,6 +61,17 @@ public class VerificationAdapter  extends BaseAdapter implements Filterable {
     List<VerificationModel>verificationDetails;
     List<VerificationModel> mStringFilterList;
     TextView loanId;
+    AlertDialog.Builder builder;
+    ExpandableListView exView;
+    ArrayList<String>groupList=new ArrayList<>();
+    public List<VerificationModel> getVerificationDetails() {
+        return verificationDetails;
+    }
+
+    public void setVerificationDetails(List<VerificationModel> verificationDetails) {
+        this.verificationDetails = verificationDetails;
+    }
+
     Button Verification;
 
     //ValueFilter valueFilter;
@@ -108,27 +121,44 @@ public class VerificationAdapter  extends BaseAdapter implements Filterable {
         loanId= (TextView) view.findViewById(R.id.loanid);
         loanId.setText(String.valueOf(verificationDetails.get(position).getLeadId()));
         Verification= (Button) view.findViewById(R.id.VerifyAddress);
+        exView= (ExpandableListView) view.findViewById(R.id.verification);
+
+      ArrayList<VerificationModel> verificationDetails1=new ArrayList<>();
+        VerificationModel newLead=new VerificationModel();
+        newLead.setLeadId(123);
+        VerificationModel newLead1=new VerificationModel();
+        newLead.setLeadId(345);
+        VerificationModel newLead2=new VerificationModel();
+        newLead.setLeadId(35);
+        verificationDetails1.add(newLead);
+        verificationDetails1.add(newLead1);
+        verificationDetails1.add(newLead2);
+        createGroupList();
+        final expandadapter expListAdapter = new expandadapter(
+                context, groupList,verificationDetails1);
+        exView.setAdapter(expListAdapter);
 
         Verification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                View dialogview = View.inflate(context, R.layout.addressverifcation, null);
+               View dialogview = View.inflate(context, R.layout.addressverifcation, null);
 
 
                 uploadImage= (ImageButton) dialogview.findViewById(R.id.upload_image1);
                 if(verificationDetails.get(position).getImage1()!=null)
                 {
-                  //  uploadImage.setImageBitmap();
+                   uploadImage.setImageBitmap(verificationDetails.get(position).getImage1());
                 }
                 uploadImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         result_camera = Permission.checkPermissioncamera(context);
                         if(result_camera)
-                            selectImage(verificationDetails.get(position).getLeadId());
+
+                            selectImage(verificationDetails,position);
                     }
                 });
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder = new AlertDialog.Builder(context);
                 builder.setTitle("Verification");
                 //builder.set
                 builder.setView(dialogview)
@@ -143,6 +173,7 @@ public class VerificationAdapter  extends BaseAdapter implements Filterable {
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
+                                dialog.dismiss();
 
                             }
                         }).show();
@@ -154,7 +185,13 @@ public class VerificationAdapter  extends BaseAdapter implements Filterable {
 
         return view;
     }
+    private void createGroupList() {
+        groupList = new ArrayList<String>();
+        groupList.add("Address Verification");
+        groupList.add("KYC");
+        groupList.add("Office Verifcation");
 
+    }
     /*@Override
     public Filter getFilter() {
         if (valueFilter == null) {
@@ -197,10 +234,10 @@ public class VerificationAdapter  extends BaseAdapter implements Filterable {
         }
     }*/
 
-    private void selectImage(int leadId) {
+    private void selectImage(List<VerificationModel> verificationDetails, int leadId) {
       //  Log.i("reached123",ex.getLocalizedMessage());
-    //    cameraIntent();
-        ((MainActivity) context).setImage(leadId);
+       // cameraIntent();
+        ((VerificationActivity) context).setImage(this);
 
        /* final CharSequence[] options = {"Take Photo", "Choose from Library", "Cancel"};
         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
@@ -251,7 +288,10 @@ public class VerificationAdapter  extends BaseAdapter implements Filterable {
 
     }
 
+public void updateImage()
+{
 
+}
 
 
 
@@ -297,5 +337,9 @@ public class VerificationAdapter  extends BaseAdapter implements Filterable {
     @Override
     public Filter getFilter() {
         return null;
+    }
+
+    public void refreshLayout() {
+        notifyDataSetChanged();
     }
 }

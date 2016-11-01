@@ -79,6 +79,7 @@
     <string-array name="array_relationship">
         <item> Select Relationship </item>
     </string-array>
+    <string name="title_activity_verification">VerificationActivity</string>
 
 
 </resources>

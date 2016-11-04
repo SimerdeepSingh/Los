@@ -35,7 +35,19 @@ import static los.valiance.com.los.Helper.Constants.verificationTable;
 public class LocalDatabase extends SQLiteOpenHelper {
     LinkedHashMap<Integer, String> dropdownDataList;
     ArrayList<LeadDetails> leadDetails;
-    public LocalDatabase(Context context) {
+    private static LocalDatabase instance;
+
+    public static synchronized LocalDatabase getHelper(Context context)
+    {
+        if (instance == null)
+            instance = new LocalDatabase(context);
+
+        return instance;
+    }
+
+
+
+   public LocalDatabase(Context context) {
         super(context, "Los", null, 1);
     }
 

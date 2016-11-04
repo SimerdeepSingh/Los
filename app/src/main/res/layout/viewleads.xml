@@ -9,8 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/default_space_between_listview"
-        android:paddingBottom="@dimen/default_space_between_listview"
+        android:paddingTop="@dimen/default_padding_top"
+        android:paddingBottom="@dimen/default_padding_top"
         android:weightSum="2">
    <TextView
        android:layout_width="0dp"
@@ -41,9 +41,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/default_space_between_listview"
-        android:paddingBottom="@dimen/default_space_between_listview"
-        android:layout_marginTop="@dimen/default_padding_top"
+        android:paddingTop="@dimen/default_padding_top"
+        android:paddingBottom="@dimen/default_padding_top"
         android:weightSum="2">
         <TextView
             android:layout_width="0dp"
@@ -73,9 +72,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/default_space_between_listview"
-        android:paddingBottom="@dimen/default_space_between_listview"
-        android:layout_marginTop="@dimen/default_padding_top"
+        android:paddingTop="@dimen/default_padding_top"
+        android:paddingBottom="@dimen/default_padding_top"
+
         android:weightSum="2">
         <TextView
             android:layout_width="0dp"
@@ -105,9 +104,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/default_space_between_listview"
-        android:paddingBottom="@dimen/default_space_between_listview"
-        android:layout_marginTop="@dimen/default_padding_top"
+        android:paddingTop="@dimen/default_padding_top"
+        android:paddingBottom="@dimen/default_padding_top"
+
         android:weightSum="2">
         <TextView
             android:layout_width="0dp"
@@ -136,10 +135,9 @@
         android:background="#ccc" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:paddingTop="@dimen/default_space_between_listview"
-        android:paddingBottom="@dimen/default_space_between_listview"
+        android:paddingTop="@dimen/default_padding_top"
+        android:paddingBottom="@dimen/default_padding_top"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_padding_top"
         android:weightSum="2">
         <TextView
             android:layout_width="0dp"

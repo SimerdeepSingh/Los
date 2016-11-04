@@ -121,22 +121,22 @@ public class VerificationAdapter  extends BaseAdapter implements Filterable {
         loanId= (TextView) view.findViewById(R.id.loanid);
         loanId.setText(String.valueOf(verificationDetails.get(position).getLeadId()));
         Verification= (Button) view.findViewById(R.id.VerifyAddress);
-        exView= (ExpandableListView) view.findViewById(R.id.verification);
+       /* exView= (ExpandableListView) view.findViewById(R.id.verification);
 
       ArrayList<VerificationModel> verificationDetails1=new ArrayList<>();
         VerificationModel newLead=new VerificationModel();
         newLead.setLeadId(123);
-        VerificationModel newLead1=new VerificationModel();
+      *//*  VerificationModel newLead1=new VerificationModel();
         newLead.setLeadId(345);
         VerificationModel newLead2=new VerificationModel();
-        newLead.setLeadId(35);
+        newLead.setLeadId(35);*//*
         verificationDetails1.add(newLead);
-        verificationDetails1.add(newLead1);
-        verificationDetails1.add(newLead2);
+       *//* verificationDetails1.add(newLead1);
+        verificationDetails1.add(newLead2);*//*
         createGroupList();
-        final expandadapter expListAdapter = new expandadapter(
+         expandadapter expListAdapter = new expandadapter(
                 context, groupList,verificationDetails1);
-        exView.setAdapter(expListAdapter);
+        exView.setAdapter(expListAdapter);*/
 
         Verification.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -142,9 +142,10 @@ LocalDatabase localDatabase;
 
         Bundle bundle = this.getArguments();
         isDataAvailable = bundle.getString("isDataAvailable");
-
+        localDatabase=LocalDatabase.getHelper(getContext());
+        Log.i("objectid", String.valueOf(localDatabase));
         View rootView = inflater.inflate(R.layout.fragment_create_lead, container, false);
-        localDatabase=new LocalDatabase(getContext());
+
         firstName= (TextInputLayout) rootView.findViewById(R.id.FirstName);
        // firstName.setTypeface(Typeface.createFromAsset(getContext().getAssets(),"font/OpenSans-Bold.ttf"));
         lastName= (TextInputLayout) rootView.findViewById(R.id.LastName);
@@ -511,10 +512,10 @@ LocalDatabase localDatabase;
             flag=false;
         }
 
-        if(citySpinner.getSelectedItemPosition()==0) {
+       /* if(citySpinner.getSelectedItemPosition()==0) {
             ((TextView)citySpinner.getSelectedView()).setError(getString(R.string.error_field_required));
             flag=false;
-        }
+        }*/
 
         if(Pincode.getEditText().getText().toString().isEmpty() || Pincode.getEditText().getText().toString().length()<6) {
             if(Pincode.getEditText().getText().toString().isEmpty())
@@ -801,6 +802,9 @@ Log.i("responseofjson1", String.valueOf(error.getMessage()));
         MenuItem backItem = menu.findItem(R.id.action_back);
         backItem.setVisible(true);
 
+        MenuItem refreshItem = menu.findItem(R.id.action_refresh);
+        refreshItem.setVisible(true);
+
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -819,6 +823,12 @@ Log.i("responseofjson1", String.valueOf(error.getMessage()));
             startActivity(intent);
         }
         }
+        if(id == R.id.action_refresh)
+        {
+            Toast.makeText(getContext(),"Uner Progress",Toast.LENGTH_SHORT).show();
+        }
+
+
         return super.onOptionsItemSelected(item);
     }
 }

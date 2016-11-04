@@ -1,18 +1,11 @@
-package los.valiance.com.los.Activity;
+package los.valiance.com.los.Services;
 
-import android.app.ProgressDialog;
+import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.Switch;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -25,18 +18,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import los.valiance.com.los.Database.LocalDatabase;
-import los.valiance.com.los.Helper.InternetConnectionDetector;
-import los.valiance.com.los.Helper.SessionManagement;
 import los.valiance.com.los.Model.CityModel;
-import los.valiance.com.los.Model.UserModel;
 import los.valiance.com.los.R;
-import los.valiance.com.los.Services.UpdateDropdownData;
 
+import static los.valiance.com.los.Helper.Constants.updateTime;
 import static los.valiance.com.los.Helper.Constants.cityTable;
 import static los.valiance.com.los.Helper.Constants.cityUrl;
 import static los.valiance.com.los.Helper.Constants.leadTypeTable;
@@ -60,147 +50,40 @@ import static los.valiance.com.los.Helper.Constants.teamManagerUrl;
 import static los.valiance.com.los.Helper.Constants.titleTable;
 import static los.valiance.com.los.Helper.Constants.titleUrl;
 import static los.valiance.com.los.Helper.Constants.typeOFEmployeeUrl;
+/**
+ * Created by admin2 on 03-11-2016.
+ */
 
-
-public class LoginActivity extends AppCompatActivity {
-
-    private String loginurl=rooturl+"/ValidateLogin";//";
-    InternetConnectionDetector icd;
-    private TextInputEditText userName;
-    private TextInputEditText password;
-    private Button signIn;
-    ProgressDialog progressDialog;
-    SessionManagement session;
-    UserModel user;
-    LocalDatabase localDatabase;
-
+public class UpdateDropdownData extends Service {
+    private static Timer timer = new Timer();
     LinkedHashMap<Integer,String> dropdownData;
+    LocalDatabase localDatabase;
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
-        progressDialog = new ProgressDialog(this);
-        icd=new InternetConnectionDetector(this);
-        session=new SessionManagement(this);
-        user=session.getUserDetails();
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public void onStart(Intent intent, int startId) {
+        // TODO Auto-generated method stub
+        super.onStart(intent, startId);
+        //   Log.d(TAG, "FirstService started");
+        Log.i("servicerunning","true");
+        timer.scheduleAtFixedRate(new timerTask(), 0, updateTime);
         localDatabase=LocalDatabase.getHelper(this);
-        Log.i("objectid", String.valueOf(localDatabase));
-       /* Intent dropdownUpdateService = new Intent(this, UpdateDropdownData.class);
-        startService(dropdownUpdateService);*/
 
-        if(user==null) {
-
-            // Comment for testing purpose
-            userName = (TextInputEditText) findViewById(R.id.username);
-            password = (TextInputEditText) findViewById(R.id.password);
-            signIn = (Button) findViewById(R.id.signinbutton);
-            signIn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (verifyData()) {
-                        if (icd.isConnectingToInternet())
-                            checkLogin(userName.getText().toString(), password.getText().toString());
-                        else
-                            Toast.makeText(LoginActivity.this, "Internet Connection Not Available", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }
-
-        else
-        {
-            Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
-        }
+        //   this.stopSelf();
     }
 
-    private boolean verifyData() {
-        boolean flag=true;
-        if(userName.getText().toString().isEmpty()) {
-            userName.setError("Please Enter Username");
-            flag=false;
+    private class timerTask extends TimerTask {
+        public void run() {
+            //toastHandler.sendEmptyMessage(0);
+            new syncLocalDbData().execute();
+          // syncLocalDbData();
         }
-            if(password.getText().toString().isEmpty())
-            {
-                password.setError("Please Enter Password");
-                flag=false;
-            }
-        return flag;
-    }
 
-    public void checkLogin(final String userName, final String password)
-    {
-        Map<String, String> postParam= new HashMap<String, String>();
-        postParam.put("UserName", userName);
-        postParam.put("Password", password);
-        progressDialog.setTitle("Verifying...");
-        progressDialog.setMessage("Please wait...");
-        progressDialog.setCancelable(false);
-        progressDialog.setIndeterminate(true);
-        progressDialog.show();
-        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.POST,loginurl,new JSONObject(postParam),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("responseofjson1",String.valueOf(response));
-                        try {
-                            String status = response.getString("Status");
-                            String userId=  response.getString("UserId");
-                            if (status.equals("1")) {
-                                user=new UserModel();
-                                user.setUserName(userName);
-                                user.setPassword(password);
-                                user.setUserId(userId);
-
-                                session.saveUserDetails(user);
-                               new syncLocalDbData().execute();
-                                /*new retrieveDropDownData().execute();
-                                retrieveDataForDropdown(statusUrl,statusTable, getResources().getStringArray(R.array.array_status)[0]);
-                                retrieveDataForDropdown(titleUrl,titleTable,getResources().getStringArray(R.array.array_title)[0]);
-                                retrieveDataForDropdown(stateUrl,stateTable,getResources().getStringArray(R.array.array_state)[0]);
-                                retrieveDataForDropdown(sourceUrl,sourceTable,getResources().getStringArray(R.array.array_source)[0]);
-                                retrieveDataForDropdown(salesOfficerUrl,salesOfficerTable,getResources().getStringArray(R.array.array_salesofficer)[0]);
-                                retrieveDataForDropdown(teamManagerUrl,teamManagerTable,getResources().getStringArray(R.array.array_teammanager)[0]);
-                                retrieveDataForDropdown(loanTypeUrl,loanTypeTable,getResources().getStringArray(R.array.array_loantype)[0]);
-                                retrieveDataForDropdown(loanPurposeUrl,loanPurposeTable,getResources().getStringArray(R.array.array_loanpurpose)[0]);
-                                retrieveDataForDropdown(typeOFEmployeeUrl,leadTypeTable,getResources().getStringArray(R.array.array_typeofemployee)[0]);
-                                retrieveDataForDropdown(relationshipUrl,relationshipTable,getResources().getStringArray(R.array.array_relationship)[0]);
-                                retrieveDataForCityDropdown(cityUrl,cityTable,getResources().getStringArray(R.array.array_city)[0]);*/
-
-                                Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                                finish();
-
-                            } else
-                                Toast.makeText(LoginActivity.this,"Invalid Credentials",Toast.LENGTH_SHORT).show();
-                        } catch (Exception e) {
-
-                            Log.i("error",e.getMessage());
-                            e.printStackTrace();
-                        }
-
-                        progressDialog.cancel();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        progressDialog.cancel();
-                        Toast.makeText(LoginActivity.this,"Internal Error",Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        RequestQueue requestQueue = Volley.newRequestQueue(LoginActivity.this);
-        requestQueue.add(stringRequest);
+        
     }
 
     protected class syncLocalDbData extends AsyncTask<Void, Void, Void>
@@ -213,15 +96,18 @@ public class LoginActivity extends AppCompatActivity {
             retrieveDataForDropdown(stateUrl, stateTable, getResources().getStringArray(R.array.array_state)[0]);
             retrieveDataForDropdown(sourceUrl, sourceTable, getResources().getStringArray(R.array.array_source)[0]);
             retrieveDataForDropdown(salesOfficerUrl, salesOfficerTable, getResources().getStringArray(R.array.array_salesofficer)[0]);
-            retrieveDataForDropdown(teamManagerUrl, teamManagerTable, getResources().getStringArray(R.array.array_teammanager)[0]);
+            /*retrieveDataForDropdown(teamManagerUrl, teamManagerTable, getResources().getStringArray(R.array.array_teammanager)[0]);
             retrieveDataForDropdown(loanTypeUrl, loanTypeTable, getResources().getStringArray(R.array.array_loantype)[0]);
             retrieveDataForDropdown(loanPurposeUrl, loanPurposeTable, getResources().getStringArray(R.array.array_loanpurpose)[0]);
             retrieveDataForDropdown(typeOFEmployeeUrl, leadTypeTable, getResources().getStringArray(R.array.array_typeofemployee)[0]);
             retrieveDataForDropdown(relationshipUrl, relationshipTable, getResources().getStringArray(R.array.array_relationship)[0]);
-            retrieveDataForCityDropdown(cityUrl, cityTable, getResources().getStringArray(R.array.array_city)[0]);
+            retrieveDataForCityDropdown(cityUrl, cityTable, getResources().getStringArray(R.array.array_city)[0]);*/
             return null;
         }
     }
+
+
+
 
     public void retrieveDataForDropdown(String url, final String tableName, final String defaultDataForSpinner)
     {
@@ -251,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                             localDatabase.addDropDownData(tableName,dropdownData);
 
                         } catch (Exception e) {
-                            Log.i("error",e.getMessage());
+                            Log.i("errorservice",e.getMessage());
                             e.printStackTrace();
                         }
 
@@ -322,6 +208,4 @@ public class LoginActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
-
 }

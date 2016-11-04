@@ -43,7 +43,7 @@ public class LeadDetailsAdapter extends BaseAdapter implements Filterable {
         this.context = context;
         this.list = list;
         this.mStringFilterList = list;
-        localDatabase=new LocalDatabase(context);
+        localDatabase=LocalDatabase.getHelper(context);
         session=new SessionManagement(context);
     }
 

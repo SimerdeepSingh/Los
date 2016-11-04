@@ -49,11 +49,11 @@
                 android:text="Verify Address"
                 android:textSize="@dimen/view_leads_size"/>
 
-    <ExpandableListView
+   <!-- <ExpandableListView
         android:id="@+id/verification"
         android:layout_width="match_parent"
         android:layout_height="fill_parent" >
-    </ExpandableListView>
+    </ExpandableListView>-->
 
     </LinearLayout>
 

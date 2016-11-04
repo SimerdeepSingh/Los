@@ -39,12 +39,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:enabled="true"  android:exported="true" android:name=".Services.UpdateDropdownData" />
+        <service android:enabled="true"  android:exported="true" android:name=".Services.SaveLocalDataToServer" />
         <activity android:name=".Activity.MenuActivity" />
         <activity android:name=".Activity.MainActivity" />
         <activity
             android:name=".Activity.VerificationActivity"
             android:label="@string/title_activity_verification"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
     </application>
+
 
 </manifest>

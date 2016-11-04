@@ -27,7 +27,7 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("font/OpenSans-Bold.ttf")
+                .setDefaultFontPath("font/OpenSans-Regular.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );

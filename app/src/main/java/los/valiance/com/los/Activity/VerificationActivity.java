@@ -62,10 +62,10 @@ public class VerificationActivity extends AppCompatActivity {
         verificationDetails=new ArrayList<>();
         VerificationModel newLead=new VerificationModel();
         newLead.setLeadId(123);
-        VerificationModel newLead1=new VerificationModel();
-        newLead1.setLeadId(1232);
+      /*  VerificationModel newLead1=new VerificationModel();
+        newLead1.setLeadId(1232);*/
         verificationDetails.add(newLead);
-        verificationDetails.add(newLead1);
+    //    verificationDetails.add(newLead1);
         setAdapter(verificationDetails);
         //retrieveDataForDropdown(viewLeadsUrl);
         getpermission();
